@@ -1,0 +1,4 @@
+RewriteEngine On
+
+# Clean product URLs: /frontend/product/slug-name
+RewriteRule ^product/([a-z0-9-]+)/?$ product.html?slug=$1 [L,QSA]

@@ -1,0 +1,18 @@
+<?php
+/**
+ * Local development overrides (Laragon / XAMPP).
+ * Copy to config.local.php and set your MySQL password.
+ * config.local.php is ignored by git — do not upload to Namecheap.
+ */
+
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'gitsystemng');
+define('DB_USER', 'root');
+define('DB_PASS', '');  // ← Laragon: often empty. If login fails, try the password from Laragon → MySQL.
+
+define('SITE_URL', 'http://gitsystemng.test');
+define('WEB_BASE_PATH', '/backend');           // project folder layout on your PC
+define('ADMIN_PATH', '/backend/admin');
+define('UPLOAD_WEB_PATH', '/backend/uploads');
+
+define('APP_DEBUG', true);
