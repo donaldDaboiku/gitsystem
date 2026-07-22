@@ -1,5 +1,6 @@
 const FALLBACK_PRODUCTS = [
-    { id: 1, slug: 'gitinvoice', name: 'GITInvoice', category: 'software', short_description: 'Online invoicing & payment tracking for businesses', price: 35000, badge: 'Live' },
+    { id: 1, slug: 'gitinvoice', name: 'GITInvoice', category: 'software', short_description: 'Online invoicing & payment tracking for businesses', price: 35000, badge: 'Live', is_external_app: true, learn_url: 'https://git-invoice-three.vercel.app/', launch_url: 'https://git-invoice-three.vercel.app/app', logo_url: 'https://git-invoice-three.vercel.app/icons/icon-192-maskable.png', brand_color: '#ff6b35', price_label: 'Try free · 3 invoices' },
+    { id: 20, slug: 'churchms', name: 'ChurchMS', category: 'software', short_description: 'Church management system for congregations', price: 1, badge: 'Live', is_external_app: true, learn_url: '', launch_url: '', logo_url: '', brand_color: '#109d48', price_label: 'Launch ChurchMS' },
     { id: 2, slug: 'sms-school-management-system', name: 'SMS - School Management System', category: 'software', short_description: 'School management software for schools', price: 850000, badge: 'New' },
     { id: 3, slug: 'hms-hospital-management-system', name: 'HMS - Hospital Management System', category: 'software', short_description: 'Hospital management software for hospitals', price: 1200000, badge: 'New' },
     { id: 4, slug: 'fsm-fashion-management-system', name: 'FSM - Fashion Management System', category: 'software', short_description: 'Fashion management software for fashion businesses', price: 500000, badge: 'New' },
@@ -36,34 +37,62 @@ function buildProductCard(product) {
         ? product.category.charAt(0).toUpperCase() + product.category.slice(1)
         : '';
 
-    if (isGitInvoiceProduct(slug)) {
-        const { learn, launch, logo } = getGitInvoiceBrand();
-        const liveBadge = `<div class="product-badge gitinvoice-badge">Live</div>`;
-        const gitInvoiceVisual = `
-            <div class="gitinvoice-card-visual">
-                <img src="${escapeHtml(logo)}" alt="GITInvoice" class="gitinvoice-logo gitinvoice-logo-lg" loading="lazy">
-            </div>`;
+    if (isExternalApp(product) || isGitInvoiceProduct(slug)) {
+        const links = getExternalAppLinks(product);
+        const color = links.color;
+        if (!links.learn && !links.launch) {
+            // External app configured but URLs not set yet
+            return `
+            <article class="product-card product-card-external" data-category="${escapeHtml(product.category)}" style="--app-brand:${escapeHtml(color)}">
+                <div class="product-card-link">
+                    <div class="product-badge" style="background:${escapeHtml(color)}">${escapeHtml(product.badge || 'Soon')}</div>
+                    <div class="product-image product-image-external">
+                        <div class="external-card-visual external-card-visual-empty"><span>${escapeHtml(product.name.charAt(0))}</span></div>
+                    </div>
+                    <div class="product-info">
+                        <p class="product-category" style="color:${escapeHtml(color)}">Software</p>
+                        <h3>${escapeHtml(product.name)}</h3>
+                        <p class="product-desc">${escapeHtml(product.short_description || '')}</p>
+                        <div class="product-footer">
+                            <span class="product-price" style="color:${escapeHtml(color)}">Coming soon</span>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn-inquire-quick" data-product-id="${product.id}" data-product-name="${escapeHtml(product.name)}" data-product-slug="${escapeHtml(slug)}">Quick Inquiry</button>
+            </article>`;
+        }
+        const isGit = isGitInvoiceProduct(slug);
+        const titleHtml = isGit
+            ? gitInvoiceWordmarkHtml(32)
+            : escapeHtml(product.name);
+        const visual = links.logo
+            ? `<div class="external-card-visual"><img src="${escapeHtml(links.logo)}" alt="${escapeHtml(product.name)}" class="external-app-logo" loading="lazy"></div>`
+            : `<div class="external-card-visual external-card-visual-empty"><span>${escapeHtml(product.name.charAt(0))}</span></div>`;
+        const liveBadge = product.badge
+            ? `<div class="product-badge" style="background:${escapeHtml(color)}">${escapeHtml(product.badge)}</div>`
+            : `<div class="product-badge" style="background:${escapeHtml(color)}">Live</div>`;
+
         return `
-        <article class="product-card product-card-gitinvoice" data-category="${escapeHtml(product.category)}">
-            <a href="${escapeHtml(learn)}" class="product-card-link" target="_blank" rel="noopener noreferrer">
+        <article class="product-card product-card-external ${isGit ? 'product-card-gitinvoice' : ''}" data-category="${escapeHtml(product.category)}" style="--app-brand:${escapeHtml(color)}">
+            <a href="${escapeHtml(links.learn)}" class="product-card-link" target="_blank" rel="noopener noreferrer">
                 ${liveBadge}
-                <div class="product-image product-image-gitinvoice">${gitInvoiceVisual}
-                    <div class="product-overlay product-overlay-gitinvoice">
+                <div class="product-image product-image-external">${visual}
+                    <div class="product-overlay product-overlay-external">
                         <span class="view-details">Learn more →</span>
                     </div>
                 </div>
                 <div class="product-info">
-                    <p class="product-category gitinvoice-category">Software</p>
-                    <h3 class="gitinvoice-title">${gitInvoiceWordmarkHtml(32)}</h3>
-                    <p class="product-desc">${escapeHtml(product.short_description || 'Professional invoicing — offline & private')}</p>
+                    <p class="product-category" style="color:${escapeHtml(color)}">Software</p>
+                    <h3 class="external-app-title">${titleHtml}</h3>
+                    <p class="product-desc">${escapeHtml(product.short_description || '')}</p>
                     <div class="product-footer">
-                        <span class="product-price product-price-gitinvoice">Try free · 3 invoices</span>
+                        <span class="product-price" style="color:${escapeHtml(color)}">${escapeHtml(links.priceLabel)}</span>
                     </div>
                 </div>
             </a>
             <div class="product-external-actions">
-                <a href="${escapeHtml(learn)}" class="btn-gitinvoice-ghost" target="_blank" rel="noopener noreferrer">Learn more</a>
-                <a href="${escapeHtml(launch)}" class="btn-gitinvoice-primary" target="_blank" rel="noopener noreferrer">Launch app</a>
+                <a href="${escapeHtml(links.learn)}" class="btn-external-ghost" style="--app-brand:${escapeHtml(color)}" target="_blank" rel="noopener noreferrer">Learn more</a>
+                <a href="${escapeHtml(links.launch)}" class="btn-external-primary" style="--app-brand:${escapeHtml(color)}" target="_blank" rel="noopener noreferrer">Launch app</a>
             </div>
         </article>`;
     }
@@ -144,6 +173,68 @@ function bindFilterButtons() {
     });
 }
 
+function renderSoftwareShowcase(products) {
+    const grid = document.getElementById('softwareGrid');
+    if (!grid) return;
+
+    const software = products.filter(p => p.category === 'software');
+    if (!software.length) {
+        grid.innerHTML = '<p class="products-empty">No software products yet.</p>';
+        return;
+    }
+
+    const icons = {
+        'sms-school-management-system': '🎓',
+        'hms-hospital-management-system': '🏥',
+        'fsm-fashion-management-system': '👗',
+        churchms: '⛪',
+        gitinvoice: '🧾',
+    };
+
+    grid.innerHTML = software.map(product => {
+        if (isExternalApp(product) || isGitInvoiceProduct(product.slug)) {
+            const links = getExternalAppLinks(product);
+            const color = links.color;
+            const isGit = isGitInvoiceProduct(product.slug);
+            const title = isGit
+                ? gitInvoiceWordmarkHtml(40)
+                : `<h3 style="margin:0">${escapeHtml(product.name)}</h3>`;
+            const logoBlock = links.logo
+                ? `<img src="${escapeHtml(links.logo)}" alt="" class="external-app-logo" width="48" height="48" loading="lazy">`
+                : `<span class="software-icon">${icons[product.slug] || '💻'}</span>`;
+
+            // Hide launch/learn if URLs not set yet (e.g. ChurchMS before admin fills them)
+            if (!links.learn && !links.launch) {
+                return `
+                <div class="software-card software-card-external" style="--app-brand:${escapeHtml(color)}">
+                    ${logoBlock}
+                    <h3>${escapeHtml(product.name)}</h3>
+                    <p>${escapeHtml(product.short_description || '')}</p>
+                    <span class="software-link">Add Learn/Launch URLs in Admin →</span>
+                </div>`;
+            }
+
+            return `
+            <div class="software-card software-card-external ${isGit ? 'software-card-gitinvoice' : ''}" style="--app-brand:${escapeHtml(color)}">
+                <div class="external-software-head">${isGit ? title : `${logoBlock}${title}`}</div>
+                <p>${escapeHtml(product.short_description || '')}</p>
+                <div class="software-actions">
+                    <a href="${escapeHtml(links.learn)}" class="btn-external-ghost btn-sm" style="--app-brand:${escapeHtml(color)}" target="_blank" rel="noopener noreferrer">Learn more</a>
+                    <a href="${escapeHtml(links.launch)}" class="btn-external-primary btn-sm" style="--app-brand:${escapeHtml(color)}" target="_blank" rel="noopener noreferrer">Launch ${escapeHtml(product.name)}</a>
+                </div>
+            </div>`;
+        }
+
+        return `
+        <a href="${productUrl(product.slug)}" class="software-card" target="_blank" rel="noopener noreferrer">
+            <span class="software-icon">${icons[product.slug] || '💻'}</span>
+            <h3>${escapeHtml(product.name)}</h3>
+            <p>${escapeHtml(product.short_description || '')}</p>
+            <span class="software-link">View landing page →</span>
+        </a>`;
+    }).join('');
+}
+
 async function loadProducts() {
     const grid = document.querySelector('.products-grid');
     if (!grid) return;
@@ -175,6 +266,7 @@ async function loadProducts() {
 
     bindFilterButtons();
     renderProducts(allProducts);
+    renderSoftwareShowcase(allProducts);
 }
 
 function inquireProduct(productId, productName) {

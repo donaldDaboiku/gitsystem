@@ -31,11 +31,39 @@ function escapeHtml(text) {
 
 function productUrl(slug) {
     if (!slug) return `${FRONTEND_BASE}/index.html#products`;
-    if (isGitInvoiceProduct(slug)) return getGitInvoiceUrls().learn;
     return `${FRONTEND_BASE}/product/${slug}`;
 }
 
-const GITINVOICE_SLUGS = ['gitinvoice', 'invohub-invoicing-software'];
+function isExternalApp(product) {
+    if (!product) return false;
+    if (product.is_external_app) return true;
+    return !!(product.learn_url || product.launch_url);
+}
+
+function getExternalAppLinks(product) {
+    // Legacy GITInvoice fallback if DB fields not migrated yet
+    if (isGitInvoiceProduct(product?.slug) && !product?.learn_url && !product?.launch_url) {
+        const brand = getGitInvoiceBrand();
+        return {
+            learn: brand.learn,
+            launch: brand.launch,
+            logo: brand.logo,
+            color: '#ff6b35',
+            priceLabel: product?.price_label || 'Try free · 3 invoices',
+        };
+    }
+    const learn = (product.learn_url || product.launch_url || '').trim();
+    const launch = (product.launch_url || product.learn_url || '').trim();
+    return {
+        learn,
+        launch,
+        logo: (product.logo_url || product.image || '').trim(),
+        color: product.brand_color || '#109d48',
+        priceLabel: product.price_label || 'Launch app',
+    };
+}
+
+const GITINVOICE_SLUGS = ['gitinvoice', 'invohub-invoicing-software', 'gitinvoice-invoicing-software'];
 
 function isGitInvoiceProduct(slug) {
     return GITINVOICE_SLUGS.includes(slug);

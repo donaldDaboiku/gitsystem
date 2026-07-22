@@ -38,28 +38,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $badge = sanitize($_POST['badge'] ?? '');
     $is_featured = isset($_POST['is_featured']) ? 1 : 0;
     $is_active = isset($_POST['is_active']) ? 1 : 0;
+    $is_external_app = isset($_POST['is_external_app']) ? 1 : 0;
+    $learn_url = trim($_POST['learn_url'] ?? '');
+    $launch_url = trim($_POST['launch_url'] ?? '');
+    $logo_url = trim($_POST['logo_url'] ?? '');
+    $brand_color = trim($_POST['brand_color'] ?? '#109d48') ?: '#109d48';
+    $price_label = sanitize($_POST['price_label'] ?? '');
     $slug = generateSlug($name);
 
-    if (empty($name) || $category_id <= 0 || $price <= 0) {
-        $error = 'Name, category, and price are required.';
+    if (!preg_match('/^#[0-9A-Fa-f]{6}$/', $brand_color)) {
+        $brand_color = '#109d48';
+    }
+
+    if (empty($name) || $category_id <= 0 || ($price < 0) || (!$is_external_app && $price <= 0)) {
+        $error = 'Name, category, and a valid price are required.';
     } else {
         try {
             if ($id) {
                 $stmt = $pdo->prepare("
                     UPDATE products SET category_id=?, name=?, slug=?, short_description=?, description=?,
-                    price=?, original_price=?, stock_quantity=?, badge=?, is_featured=?, is_active=?
+                    price=?, original_price=?, stock_quantity=?, badge=?, is_featured=?, is_active=?,
+                    is_external_app=?, learn_url=?, launch_url=?, logo_url=?, brand_color=?, price_label=?
                     WHERE id=?
                 ");
-                $stmt->execute([$category_id, $name, $slug, $short_description, $description, $price, $original_price, $stock_quantity, $badge ?: null, $is_featured, $is_active, $id]);
+                $stmt->execute([
+                    $category_id, $name, $slug, $short_description, $description,
+                    $price, $original_price, $stock_quantity, $badge ?: null, $is_featured, $is_active,
+                    $is_external_app, $learn_url ?: null, $launch_url ?: null, $logo_url ?: null,
+                    $brand_color, $price_label ?: null, $id
+                ]);
                 $productId = $id;
                 logActivity($pdo, $_SESSION['admin_id'], 'update_product', "Updated product: $name");
                 $message = 'Product updated successfully.';
             } else {
                 $stmt = $pdo->prepare("
-                    INSERT INTO products (category_id, name, slug, short_description, description, price, original_price, stock_quantity, badge, is_featured, is_active)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    INSERT INTO products (category_id, name, slug, short_description, description, price, original_price, stock_quantity, badge, is_featured, is_active, is_external_app, learn_url, launch_url, logo_url, brand_color, price_label)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ");
-                $stmt->execute([$category_id, $name, $slug, $short_description, $description, $price, $original_price, $stock_quantity, $badge ?: null, $is_featured, $is_active]);
+                $stmt->execute([
+                    $category_id, $name, $slug, $short_description, $description,
+                    $price, $original_price, $stock_quantity, $badge ?: null, $is_featured, $is_active,
+                    $is_external_app, $learn_url ?: null, $launch_url ?: null, $logo_url ?: null,
+                    $brand_color, $price_label ?: null
+                ]);
                 $productId = (int)$pdo->lastInsertId();
                 logActivity($pdo, $_SESSION['admin_id'], 'add_product', "Added product: $name");
                 $message = 'Product added successfully.';
@@ -92,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $error = strpos($e->getMessage(), 'Duplicate') !== false
                 ? 'A product with this name already exists.'
-                : 'Failed to save product. Please try again.';
+                : (APP_DEBUG ? $e->getMessage() : 'Failed to save product. Please try again.');
         }
     }
 }
@@ -175,10 +196,46 @@ require __DIR__ . '/includes/header.php';
                 <label for="badge">Badge</label>
                 <select id="badge" name="badge">
                     <option value="">None</option>
-                    <?php foreach (['New', 'Sale', 'Popular'] as $b): ?>
+                    <?php foreach (['New', 'Sale', 'Popular', 'Live'] as $b): ?>
                         <option value="<?= $b ?>" <?= ($editProduct['badge'] ?? '') === $b ? 'selected' : '' ?>><?= $b ?></option>
                     <?php endforeach; ?>
                 </select>
+            </div>
+        </div>
+        <div class="card" style="background: rgba(16,157,72,0.06); border: 1px solid var(--border); margin-bottom: 1.25rem; padding: 1.25rem;">
+            <h3 style="margin-bottom: 0.5rem; color: var(--primary); font-size: 1rem;">Launch App (like GITInvoice / ChurchMS)</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1rem;">
+                Turn this product into an external app card with Learn more + Launch buttons. No code changes needed for future apps.
+            </p>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="is_external_app" value="1" id="is_external_app" <?= ($editProduct['is_external_app'] ?? 0) ? 'checked' : '' ?>>
+                    This is an external launch app
+                </label>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="learn_url">Learn more URL</label>
+                    <input type="url" id="learn_url" name="learn_url" placeholder="https://your-app.vercel.app/" value="<?= htmlspecialchars($editProduct['learn_url'] ?? '') ?>">
+                </div>
+                <div class="form-group">
+                    <label for="launch_url">Launch app URL</label>
+                    <input type="url" id="launch_url" name="launch_url" placeholder="https://your-app.vercel.app/app" value="<?= htmlspecialchars($editProduct['launch_url'] ?? '') ?>">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="logo_url">Logo image URL (optional)</label>
+                    <input type="url" id="logo_url" name="logo_url" placeholder="https://…/icon.png" value="<?= htmlspecialchars($editProduct['logo_url'] ?? '') ?>">
+                </div>
+                <div class="form-group">
+                    <label for="brand_color">Brand color</label>
+                    <input type="text" id="brand_color" name="brand_color" placeholder="#109d48" value="<?= htmlspecialchars($editProduct['brand_color'] ?? '#109d48') ?>">
+                </div>
+                <div class="form-group">
+                    <label for="price_label">Price / CTA label</label>
+                    <input type="text" id="price_label" name="price_label" placeholder="Launch app" value="<?= htmlspecialchars($editProduct['price_label'] ?? '') ?>">
+                </div>
             </div>
         </div>
         <div class="form-group">
@@ -188,7 +245,7 @@ require __DIR__ . '/includes/header.php';
             </label>
             &nbsp;&nbsp;
             <label>
-                <input type="checkbox" name="is_active" value="1" <?= ($editProduct['is_active'] ?? 1) ? 'checked' : '' ?>>
+                <input type="checkbox" name="is_active" value="1" <?= !isset($editProduct) || ($editProduct['is_active'] ?? 1) ? 'checked' : '' ?>>
                 Active (visible on site)
             </label>
         </div>
@@ -229,6 +286,7 @@ require __DIR__ . '/includes/header.php';
                     <td>
                         <?= htmlspecialchars($p['name']) ?>
                         <?php if ($p['is_featured']): ?><span class="badge badge-new">Featured</span><?php endif; ?>
+                        <?php if (!empty($p['is_external_app'])): ?><span class="badge badge-resolved">Launch app</span><?php endif; ?>
                     </td>
                     <td><?= htmlspecialchars($p['category_name'] ?? '—') ?></td>
                     <td><?= formatPrice($p['price']) ?></td>

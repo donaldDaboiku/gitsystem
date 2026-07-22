@@ -53,7 +53,13 @@ try {
                 'original_price' => $product['original_price'] ? (float)$product['original_price'] : null,
                 'badge' => $product['badge'],
                 'image' => $product['primary_image'] ? UPLOAD_URL . $product['primary_image'] : null,
-                'is_featured' => (bool)$product['is_featured']
+                'is_featured' => (bool)$product['is_featured'],
+                'is_external_app' => (bool)($product['is_external_app'] ?? false),
+                'learn_url' => $product['learn_url'] ?? null,
+                'launch_url' => $product['launch_url'] ?? null,
+                'logo_url' => $product['logo_url'] ?? null,
+                'brand_color' => $product['brand_color'] ?? '#109d48',
+                'price_label' => $product['price_label'] ?? null,
             ];
         }
         
@@ -147,6 +153,12 @@ try {
                         'image' => $r['primary_image'] ? UPLOAD_URL . $r['primary_image'] : null,
                     ];
                 }, $related),
+                'is_external_app' => (bool)($product['is_external_app'] ?? false),
+                'learn_url' => $product['learn_url'] ?? null,
+                'launch_url' => $product['launch_url'] ?? null,
+                'logo_url' => $product['logo_url'] ?? null,
+                'brand_color' => $product['brand_color'] ?? '#109d48',
+                'price_label' => $product['price_label'] ?? null,
             ]
         ]);
         

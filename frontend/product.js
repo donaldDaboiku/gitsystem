@@ -272,7 +272,7 @@ async function loadProduct() {
     }
 
     if (isGitInvoiceProduct(slug)) {
-        const { learn, launch } = getGitInvoiceUrls();
+        const { launch } = getGitInvoiceUrls();
         window.location.replace(launch);
         return;
     }
@@ -281,7 +281,15 @@ async function loadProduct() {
         const res = await fetch(`${API_BASE}?action=product&slug=${encodeURIComponent(slug)}`);
         const data = await res.json();
         if (data.success && data.data) {
-            renderProductPage(data.data);
+            const product = data.data;
+            if (isExternalApp(product)) {
+                const links = getExternalAppLinks(product);
+                if (links.launch || links.learn) {
+                    window.location.replace(links.launch || links.learn);
+                    return;
+                }
+            }
+            renderProductPage(product);
             return;
         }
     } catch { /* fallback below */ }
