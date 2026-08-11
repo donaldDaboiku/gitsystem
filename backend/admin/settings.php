@@ -14,6 +14,7 @@ $keys = [
 ];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    require_csrf_from_post();
     $formAction = $_POST['form_action'] ?? 'site_settings';
 
     if ($formAction === 'change_password') {
@@ -88,6 +89,7 @@ require __DIR__ . '/includes/header.php';
     </p>
     <form method="POST">
         <input type="hidden" name="form_action" value="site_settings">
+        <?= csrf_field() ?>
         <div class="form-row">
             <div class="form-group">
                 <label for="site_name">Site / Business Name</label>
@@ -153,6 +155,7 @@ require __DIR__ . '/includes/header.php';
 
     <form method="POST" autocomplete="off">
         <input type="hidden" name="form_action" value="change_password">
+        <?= csrf_field() ?>
         <div class="form-group">
             <label for="current_password">Current Password</label>
             <input type="password" id="current_password" name="current_password" required autocomplete="current-password">

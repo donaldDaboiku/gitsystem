@@ -1900,6 +1900,16 @@
             font-size: 0.9rem;
         }
 
+        /* Honeypot — hidden from humans */
+        .hp-field {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+
         /* External launch apps (ChurchMS, GITInvoice, future apps from Admin) */
         .product-card-external {
             border-color: color-mix(in srgb, var(--app-brand, var(--primary)) 35%, transparent);

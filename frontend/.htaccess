@@ -1,4 +1,22 @@
-RewriteEngine On
+# Frontend — clean URLs + security headers
 
-# Clean product URLs: /frontend/product/slug-name
-RewriteRule ^product/([a-z0-9-]+)/?$ product.html?slug=$1 [L,QSA]
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS except local Laragon / localhost
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP_HOST} !\.test$ [NC]
+    RewriteCond %{HTTP_HOST} !^localhost [NC]
+    RewriteCond %{HTTP_HOST} !^127\.0\.0\.1 [NC]
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Clean product URLs: /frontend/product/slug-name
+    RewriteRule ^product/([a-z0-9-]+)/?$ product.html?slug=$1 [L,QSA]
+</IfModule>

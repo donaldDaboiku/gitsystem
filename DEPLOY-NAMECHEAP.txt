@@ -1,0 +1,53 @@
+# Namecheap production checklist for GITSYSTEM
+# Replace yourdomain.com everywhere after purchase.
+
+## A. Local (already implemented in code)
+- [x] Session hardening (HttpOnly, SameSite, regenerate on login)
+- [x] CSRF on admin forms + contact API
+- [x] Rate limit: login (5 / 15 min) + inquiries (5 / hour)
+- [x] Security headers (PHP + .htaccess)
+- [x] HTTPS redirect in .htaccess (skips .test / localhost)
+- [x] OG tags, robots.txt, sitemap.php
+- [x] Inquiry email notification (PHP mail → site_email in Settings)
+
+## B. Namecheap — hosting + domain
+1. Buy Shared Hosting and attach your domain
+2. cPanel → Select PHP Version → set PHP 8.1+ (8.2 preferred)
+3. cPanel → MySQL Databases → create DB + user + privileges
+4. cPanel → SSL/TLS Status → AutoSSL → Run / Issue for your domain
+5. Wait until AutoSSL shows green / issued
+
+## C. Upload
+1. Export local DB from Laragon phpMyAdmin
+2. Upload project to public_html (frontend/ + backend/ + index.php + robots.txt + sitemap.php + .htaccess)
+3. DO NOT upload backend/config.local.php
+4. Edit backend/config.php on server:
+   - DB_HOST=localhost
+   - DB_NAME / DB_USER / DB_PASS from cPanel
+   - SITE_URL=https://yourdomain.com
+   - WEB_BASE_PATH=/backend
+   - ADMIN_PATH=/backend/admin
+   - UPLOAD_WEB_PATH=/backend/uploads
+   - APP_DEBUG=false
+   - MAIL_FROM=noreply@yourdomain.com (optional)
+5. Import SQL into Namecheap MySQL
+6. Ensure backend/uploads and backend/storage are writable (755/775)
+7. Replace yourdomain.com in:
+   - frontend/index.html (canonical + og:url + og:image)
+   - robots.txt Sitemap line
+   - frontend/robots.txt Sitemap line
+
+## D. Immediate after go-live
+1. Open https://yourdomain.com/backend/admin/login.php
+2. Login with admin / admin123 (or your local password)
+3. Settings → Change Admin Password immediately
+4. Settings → set site_email (used for inquiry emails)
+5. Confirm http://yourdomain.com redirects to https://
+6. Submit a test contact form → check inbox + Admin → Inquiries
+7. Open https://yourdomain.com/sitemap.php and /robots.txt
+
+## E. URLs
+- Site: https://yourdomain.com/frontend/
+- Admin: https://yourdomain.com/backend/admin/login.php
+- Sitemap: https://yourdomain.com/sitemap.php
+- Robots: https://yourdomain.com/robots.txt

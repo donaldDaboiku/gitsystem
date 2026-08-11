@@ -6,6 +6,17 @@
     <title>GITSYSTEM - Greenpasture Integrated Technology</title>
     <meta name="description" content="Professional IT solutions, hardware/software services, networking, tech academy, and consultation in Nigeria. Your trusted technology partner.">
     <link rel="icon" href="assets/gitsystem-icon.png" type="image/png">
+    <link rel="canonical" href="https://yourdomain.com/frontend/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="GITSYSTEM">
+    <meta property="og:title" content="GITSYSTEM — Greenpasture Integrated Technology">
+    <meta property="og:description" content="Professional IT solutions, hardware/software services, networking, tech academy, and consultation in Nigeria.">
+    <meta property="og:url" content="https://yourdomain.com/frontend/">
+    <meta property="og:image" content="https://yourdomain.com/frontend/assets/gitsystem-logo.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="GITSYSTEM — Greenpasture Integrated Technology">
+    <meta name="twitter:description" content="Professional IT solutions, hardware/software services, networking, tech academy, and consultation in Nigeria.">
+    <meta name="twitter:image" content="https://yourdomain.com/frontend/assets/gitsystem-logo.png">
     <meta name="api-base" content="/backend/data.php">
     <meta name="frontend-base" content="/frontend">
     <!-- Replace with your live GITInvoice Vercel URL (no trailing slash) -->
@@ -15,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=6">
+    <link rel="stylesheet" href="style.css?v=7">
     
 </head>
 <body>
@@ -340,6 +351,10 @@
                 <div class="contact-form">
                     <form id="contactForm">
                         <input type="hidden" id="product_id" name="product_id" value="">
+                        <div class="hp-field" aria-hidden="true">
+                            <label for="website">Website</label>
+                            <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                        </div>
                         <div class="form-group">
                             <label for="name">Full Name *</label>
                             <input type="text" id="name" name="name" required>
@@ -423,7 +438,7 @@
     <!-- Scroll to Top Button -->
     <button class="scroll-top" id="scrollTop">↑</button>
     
-    <script src="shared.js?v=6"></script>
+    <script src="shared.js?v=7"></script>
     <script src="app.js?v=6"></script>
 </body>
 </html>

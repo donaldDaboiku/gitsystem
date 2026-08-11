@@ -167,6 +167,13 @@ function initNavigation() {
     if (year) year.textContent = new Date().getFullYear();
 }
 
+async function fetchCsrfToken() {
+    const res = await fetch(`${API_BASE}?action=csrf_token`, { credentials: 'same-origin' });
+    const data = await res.json();
+    if (!data.success || !data.token) throw new Error('CSRF token unavailable');
+    return data.token;
+}
+
 async function submitInquiry(form, productId = null) {
     const submitBtn = form.querySelector('button[type="submit"]');
     const originalText = submitBtn.textContent;
@@ -174,19 +181,26 @@ async function submitInquiry(form, productId = null) {
     submitBtn.textContent = 'Sending…';
 
     const formData = new FormData(form);
-    const payload = {
-        name: formData.get('name'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        service: formData.get('service') || 'product',
-        message: formData.get('message'),
-        product_id: formData.get('product_id') || productId || null
-    };
-
     try {
+        const csrf = await fetchCsrfToken();
+        const payload = {
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            service: formData.get('service') || 'product',
+            message: formData.get('message'),
+            product_id: formData.get('product_id') || productId || null,
+            website: formData.get('website') || '',
+            _csrf: csrf
+        };
+
         const res = await fetch(`${API_BASE}?action=submit_inquiry`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-Token': csrf
+            },
             body: JSON.stringify(payload)
         });
         const data = await res.json();

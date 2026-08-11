@@ -8,17 +8,20 @@ $error = '';
 
 $categories = $pdo->query("SELECT id, name FROM categories WHERE is_active = 1 ORDER BY display_order")->fetchAll();
 
-// Delete product
-if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
-    $id = (int)$_GET['delete'];
-    $stmt = $pdo->prepare("SELECT image_path FROM product_images WHERE product_id = ?");
-    $stmt->execute([$id]);
-    foreach ($stmt->fetchAll() as $img) {
-        deleteImage($img['image_path']);
+// Delete product (POST + CSRF only)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
+    require_csrf_from_post();
+    $id = (int)$_POST['delete_id'];
+    if ($id > 0) {
+        $stmt = $pdo->prepare('SELECT image_path FROM product_images WHERE product_id = ?');
+        $stmt->execute([$id]);
+        foreach ($stmt->fetchAll() as $img) {
+            deleteImage($img['image_path']);
+        }
+        $pdo->prepare('DELETE FROM products WHERE id = ?')->execute([$id]);
+        logActivity($pdo, $_SESSION['admin_id'], 'delete_product', "Deleted product #$id");
+        redirect('products.php?msg=deleted');
     }
-    $pdo->prepare("DELETE FROM products WHERE id = ?")->execute([$id]);
-    logActivity($pdo, $_SESSION['admin_id'], 'delete_product', "Deleted product #$id");
-    redirect('products.php?msg=deleted');
 }
 
 if (isset($_GET['msg']) && $_GET['msg'] === 'deleted') {
@@ -26,7 +29,8 @@ if (isset($_GET['msg']) && $_GET['msg'] === 'deleted') {
 }
 
 // Add or edit product
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['delete_id'])) {
+    require_csrf_from_post();
     $id = !empty($_POST['id']) ? (int)$_POST['id'] : null;
     $name = sanitize($_POST['name'] ?? '');
     $category_id = (int)($_POST['category_id'] ?? 0);
@@ -153,6 +157,7 @@ require __DIR__ . '/includes/header.php';
 <div class="card">
     <h2><?= $editProduct ? 'Edit Product' : 'Add New Product' ?></h2>
     <form method="POST" enctype="multipart/form-data">
+        <?= csrf_field() ?>
         <?php if ($editProduct): ?>
             <input type="hidden" name="id" value="<?= (int)$editProduct['id'] ?>">
         <?php endif; ?>
@@ -294,7 +299,11 @@ require __DIR__ . '/includes/header.php';
                     <td><?= $p['is_active'] ? '<span class="badge badge-resolved">Active</span>' : '<span class="badge badge-spam">Inactive</span>' ?></td>
                     <td class="actions">
                         <a href="products.php?edit=<?= (int)$p['id'] ?>" class="btn btn-sm btn-primary">Edit</a>
-                        <a href="products.php?delete=<?= (int)$p['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Delete this product?')">Delete</a>
+                        <form method="POST" style="display:inline" onsubmit="return confirm('Delete this product?')">
+                            <?= csrf_field() ?>
+                            <input type="hidden" name="delete_id" value="<?= (int)$p['id'] ?>">
+                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 <?php endforeach; ?>

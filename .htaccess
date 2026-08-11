@@ -1,0 +1,27 @@
+# GITSYSTEM root — security headers + HTTPS (skip .test / localhost for Laragon)
+
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    Header always set X-XSS-Protection "0"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Force HTTPS except local Laragon / localhost
+    RewriteCond %{HTTPS} !=on
+    RewriteCond %{HTTP_HOST} !\.test$ [NC]
+    RewriteCond %{HTTP_HOST} !^localhost [NC]
+    RewriteCond %{HTTP_HOST} !^127\.0\.0\.1 [NC]
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # HSTS only after HTTPS is on (set via PHP/headers on HTTPS too)
+</IfModule>
+
+# Block hidden / sensitive paths if ever exposed at root
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>

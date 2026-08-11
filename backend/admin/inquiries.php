@@ -6,6 +6,7 @@ $pageTitle = 'Inquiries';
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['inquiry_id'], $_POST['status'])) {
+    require_csrf_from_post();
     $id = (int)$_POST['inquiry_id'];
     $status = sanitize($_POST['status']);
     $allowed = ['new', 'contacted', 'resolved', 'spam'];
@@ -77,6 +78,7 @@ require __DIR__ . '/includes/header.php';
                     <td><?= date('M j, Y', strtotime($inq['created_at'])) ?></td>
                     <td>
                         <form method="POST" style="display: inline;">
+                            <?= csrf_field() ?>
                             <input type="hidden" name="inquiry_id" value="<?= (int)$inq['id'] ?>">
                             <select name="status" onchange="this.form.submit()" style="padding: 0.3rem; font-size: 0.85rem;">
                                 <?php foreach (['new', 'contacted', 'resolved', 'spam'] as $s): ?>

@@ -188,6 +188,10 @@ function renderProductPage(product) {
                 <form class="product-inquiry-form" id="productInquiryForm">
                     <input type="hidden" name="product_id" value="${product.id}">
                     <input type="hidden" name="service" value="product">
+                    <div class="hp-field" aria-hidden="true">
+                        <label for="website">Website</label>
+                        <input type="text" id="website" name="website" tabindex="-1" autocomplete="off">
+                    </div>
                     <div class="form-group">
                         <label for="name">Full Name *</label>
                         <input type="text" id="name" name="name" required>

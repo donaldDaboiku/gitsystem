@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /backend/admin/
+
+Sitemap: https://yourdomain.com/sitemap.php

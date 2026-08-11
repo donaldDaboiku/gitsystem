@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+Disallow: /backend/admin/
+Disallow: /backend/storage/
+Disallow: /backend/config.php
+Disallow: /backend/config.local.php
+
+Sitemap: https://yourdomain.com/sitemap.php

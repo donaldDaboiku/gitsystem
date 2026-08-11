@@ -1,1 +1,3 @@
 config.local.php
+storage/ratelimit/*.json
+!storage/ratelimit/.gitkeep

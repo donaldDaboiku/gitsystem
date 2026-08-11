@@ -1,6 +1,7 @@
 <?php
 require_once dirname(__DIR__, 2) . '/config.php';
 requireLogin();
+send_security_headers();
 
 $currentPage = basename($_SERVER['PHP_SELF'], '.php');
 ?>
@@ -9,6 +10,7 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
     <title><?= htmlspecialchars($pageTitle ?? 'Admin') ?> - GITSYSTEM</title>
     <link rel="stylesheet" href="assets/admin.css">
 </head>
