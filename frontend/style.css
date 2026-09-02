@@ -157,24 +157,20 @@
             width: auto;
             max-width: min(240px, 52vw);
             object-fit: contain;
-            background: #fff;
-            padding: 5px 12px;
-            border-radius: 10px;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+            display: block;
         }
         
         .logo-img-icon {
             height: 40px;
             width: 40px;
-            padding: 0;
-            border-radius: 8px;
-            background: #fff;
+            display: block;
         }
         
         .footer-logo {
             height: 36px;
             max-width: 200px;
             margin-bottom: 0.75rem;
+            opacity: 0.95;
         }
         
         .nav-links {
