@@ -1,0 +1,60 @@
+<?php require_once __DIR__ . '/bootstrap.php'; ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<?php require __DIR__ . '/includes/head-product.php'; ?>
+</head>
+<body class="product-page">
+    <div class="bg-animation">
+        <div class="grid-overlay"></div>
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+    </div>
+
+    <header id="header">
+        <nav>
+            <a href="index.php" class="logo" aria-label="GITSYSTEM home">
+                <img src="assets/gitsystem-logo.png" alt="GITSYSTEM" class="logo-img" width="200" height="40">
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.php#home">Home</a></li>
+                <li><a href="index.php#services">Services</a></li>
+                <li><a href="index.php#products">Products</a></li>
+                <li><a href="index.php#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-toggle" id="mobileToggle">
+                <span></span><span></span><span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main id="productMain">
+        <div class="product-loading-screen">
+            <div class="loader-ring"></div>
+            <p>Loading product…</p>
+        </div>
+    </main>
+
+    <div class="product-sticky-bar" id="stickyBar" hidden>
+        <div class="sticky-bar-inner">
+            <div class="sticky-info">
+                <span class="sticky-name" id="stickyName"></span>
+                <span class="sticky-price" id="stickyPrice"></span>
+            </div>
+            <div class="sticky-actions">
+                <button type="button" class="btn btn-secondary btn-sm" id="stickyContact">Contact Us</button>
+                <button type="button" class="btn btn-primary btn-sm" id="stickyBuy">Request Quote</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="product-footer-mini">
+        <p>&copy; <span id="currentYear"></span> GITSYSTEM — <a href="index.php">Back to home</a></p>
+    </footer>
+
+    <button class="scroll-top" id="scrollTop">↑</button>
+
+    <?= asset_tag_js('shared.js') ?>
+    <?= asset_tag_js('product.js') ?>
+</body>
+</html>

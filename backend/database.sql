@@ -77,6 +77,7 @@ CREATE TABLE IF NOT EXISTS product_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_id INT NOT NULL,
     image_path VARCHAR(255) NOT NULL,
+    webp_path VARCHAR(255) NULL,
     is_primary BOOLEAN DEFAULT FALSE,
     display_order INT DEFAULT 0,
     alt_text VARCHAR(200),

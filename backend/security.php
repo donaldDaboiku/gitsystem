@@ -119,7 +119,7 @@ function rate_limit_reset(string $bucket): void {
     }
 }
 
-function send_security_headers(bool $jsonApi = false): void {
+function send_security_headers(bool $jsonApi = false, ?string $cspNonce = null): void {
     if (headers_sent()) {
         return;
     }
@@ -128,7 +128,13 @@ function send_security_headers(bool $jsonApi = false): void {
     header('X-Frame-Options: SAMEORIGIN');
     header('Referrer-Policy: strict-origin-when-cross-origin');
     header('Permissions-Policy: geolocation=(), microphone=(), camera=()');
-    header("Content-Security-Policy: default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'");
+
+    $scriptSrc = "'self'";
+    if ($cspNonce) {
+        $scriptSrc .= " 'nonce-" . $cspNonce . "'";
+    }
+
+    header("Content-Security-Policy: default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src {$scriptSrc}; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'");
 
     if (!$jsonApi) {
         header('X-XSS-Protection: 0');
@@ -142,7 +148,7 @@ function send_security_headers(bool $jsonApi = false): void {
 }
 
 /**
- * Notify site inbox about a new inquiry. Uses PHP mail() (works on Namecheap).
+ * Notify site inbox about a new inquiry via SMTP (PHPMailer) or mail() fallback.
  */
 function notify_inquiry_email(PDO $pdo, array $inquiry): bool {
     $stmt = $pdo->prepare("SELECT setting_value FROM settings WHERE setting_key = 'site_email' LIMIT 1");
@@ -173,6 +179,39 @@ function notify_inquiry_email(PDO $pdo, array $inquiry): bool {
     $from = defined('MAIL_FROM') && MAIL_FROM
         ? MAIL_FROM
         : ('noreply@' . (parse_url(SITE_URL, PHP_URL_HOST) ?: 'gitsystemng.com'));
+
+    $autoload = __DIR__ . '/vendor/autoload.php';
+    if (defined('SMTP_HOST') && SMTP_HOST && is_readable($autoload)) {
+        require_once $autoload;
+        try {
+            $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+            $mail->isSMTP();
+            $mail->Host = SMTP_HOST;
+            $mail->Port = (int)SMTP_PORT;
+            $mail->SMTPAuth = SMTP_USER !== '';
+            if ($mail->SMTPAuth) {
+                $mail->Username = SMTP_USER;
+                $mail->Password = SMTP_PASS;
+            }
+            if (SMTP_SECURE === 'ssl') {
+                $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
+            } elseif (SMTP_SECURE === 'tls') {
+                $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+            }
+            $mail->CharSet = 'UTF-8';
+            $mail->setFrom($from, 'GITSYSTEM');
+            $mail->addAddress($to);
+            $mail->addReplyTo($email, $name);
+            $mail->Subject = $subject;
+            $mail->Body = $body;
+            return $mail->send();
+        } catch (Throwable $e) {
+            if (defined('APP_DEBUG') && APP_DEBUG) {
+                error_log('SMTP inquiry mail failed: ' . $e->getMessage());
+            }
+            return false;
+        }
+    }
 
     $headers = [
         'From: GITSYSTEM <' . $from . '>',

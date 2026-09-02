@@ -1,5 +1,46 @@
 # GITSYSTEMNG - Complete Installation Guide
 
+## Frontend asset build (CSS/JS minify + cache bust)
+
+After changing `frontend/style.css`, `app.js`, `shared.js`, or `product.js`, run:
+
+```bash
+php scripts/build-assets.php
+```
+
+This writes hashed files to `frontend/dist/` and updates `frontend/assets-manifest.json`. PHP pages (`index.php`, `product.php`) load assets via `asset_tag_css()` / `asset_tag_js()` automatically.
+
+Without running the build script, pages fall back to the unminified source files (fine for local dev).
+
+## Backend mail (SMTP via PHPMailer)
+
+```bash
+cd backend
+composer install
+```
+
+Set in `backend/config.local.php` (local) or production `config.php`:
+
+```php
+define('SMTP_HOST', 'smtp.yourhost.com');
+define('SMTP_PORT', 587);
+define('SMTP_USER', 'your@email.com');
+define('SMTP_PASS', 'your-password');
+define('SMTP_SECURE', 'tls'); // tls | ssl | ''
+define('MAIL_FROM', 'noreply@yourdomain.com');
+```
+
+If SMTP is not configured, inquiry emails fall back to PHP `mail()`.
+
+## Database migrations (existing installs)
+
+Run in phpMyAdmin if upgrading:
+
+- `backend/update_image_webp.sql` — WebP column on product images
+- `backend/update_external_apps.sql` — external launch app fields
+
+---
+
 ## 📋 What You're Getting
 
 A complete website with backend admin panel for Greenpasture Tech System:

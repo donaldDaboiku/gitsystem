@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../config.php';
-send_security_headers();
+if (!defined('CSP_NONCE')) {
+    define('CSP_NONCE', base64_encode(random_bytes(16)));
+}
+send_security_headers(false, CSP_NONCE);
 
 if (isLoggedIn()) {
     redirect(ADMIN_URL . '/index.php');

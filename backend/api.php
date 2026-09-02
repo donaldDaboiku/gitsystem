@@ -36,7 +36,8 @@ try {
     if ($action === 'products') {
         $sql = "
             SELECT p.*, c.slug as category_slug,
-                   (SELECT image_path FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as primary_image
+                   (SELECT image_path FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as primary_image,
+                   (SELECT webp_path FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as primary_webp
             FROM products p
             LEFT JOIN categories c ON p.category_id = c.id
             WHERE p.is_active = 1
@@ -59,6 +60,7 @@ try {
 
         $formatted_products = [];
         foreach ($products as $product) {
+            $img = format_image_urls($product['primary_image'] ?? null, $product['primary_webp'] ?? null);
             $formatted_products[] = [
                 'id' => $product['id'],
                 'name' => $product['name'],
@@ -68,7 +70,8 @@ try {
                 'price' => (float)$product['price'],
                 'original_price' => $product['original_price'] ? (float)$product['original_price'] : null,
                 'badge' => $product['badge'],
-                'image' => $product['primary_image'] ? UPLOAD_URL . $product['primary_image'] : null,
+                'image' => $img['url'],
+                'image_webp' => $img['webp_url'],
                 'is_featured' => (bool)$product['is_featured'],
                 'is_external_app' => (bool)($product['is_external_app'] ?? false),
                 'learn_url' => $product['learn_url'] ?? null,
@@ -127,7 +130,8 @@ try {
 
         $stmt = $pdo->prepare("
             SELECT p.id, p.name, p.slug, p.price, p.badge, p.short_description,
-                   (SELECT image_path FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as primary_image
+                   (SELECT image_path FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as primary_image,
+                   (SELECT webp_path FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as primary_webp
             FROM products p
             WHERE p.category_id = ? AND p.id != ? AND p.is_active = 1
             ORDER BY p.is_featured DESC, p.created_at DESC
@@ -155,10 +159,11 @@ try {
                 'badge' => $product['badge'],
                 'views' => (int)$product['views'] + 1,
                 'images' => array_map(static function ($img) {
-                    return UPLOAD_URL . $img['image_path'];
+                    return format_image_urls($img['image_path'], $img['webp_path'] ?? null);
                 }, $images),
                 'specs' => $specs,
                 'related' => array_map(static function ($r) {
+                    $img = format_image_urls($r['primary_image'] ?? null, $r['primary_webp'] ?? null);
                     return [
                         'id' => (int)$r['id'],
                         'name' => $r['name'],
@@ -166,7 +171,8 @@ try {
                         'price' => (float)$r['price'],
                         'badge' => $r['badge'],
                         'short_description' => $r['short_description'],
-                        'image' => $r['primary_image'] ? UPLOAD_URL . $r['primary_image'] : null,
+                        'image' => $img['url'],
+                        'image_webp' => $img['webp_url'],
                     ];
                 }, $related),
                 'is_external_app' => (bool)($product['is_external_app'] ?? false),

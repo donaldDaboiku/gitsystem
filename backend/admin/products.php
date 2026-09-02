@@ -13,10 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     require_csrf_from_post();
     $id = (int)$_POST['delete_id'];
     if ($id > 0) {
-        $stmt = $pdo->prepare('SELECT image_path FROM product_images WHERE product_id = ?');
+        $stmt = $pdo->prepare('SELECT image_path, webp_path FROM product_images WHERE product_id = ?');
         $stmt->execute([$id]);
         foreach ($stmt->fetchAll() as $img) {
-            deleteImage($img['image_path']);
+            deleteImage($img['image_path'], $img['webp_path'] ?? null);
         }
         $pdo->prepare('DELETE FROM products WHERE id = ?')->execute([$id]);
         logActivity($pdo, $_SESSION['admin_id'], 'delete_product', "Deleted product #$id");
@@ -104,8 +104,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['delete_id'])) {
                     ];
                     $result = uploadImage($file);
                     if ($result['success']) {
-                        $stmt = $pdo->prepare("INSERT INTO product_images (product_id, image_path, is_primary, display_order) VALUES (?, ?, ?, ?)");
-                        $stmt->execute([$productId, $result['path'], $isFirst ? 1 : 0, $i]);
+                        $stmt = $pdo->prepare('INSERT INTO product_images (product_id, image_path, webp_path, is_primary, display_order) VALUES (?, ?, ?, ?, ?)');
+                        $stmt->execute([$productId, $result['path'], $result['webp_path'] ?? null, $isFirst ? 1 : 0, $i]);
                         $isFirst = false;
                     }
                 }
@@ -133,13 +133,29 @@ if (isset($_GET['edit']) && is_numeric($_GET['edit'])) {
     $editProduct = $stmt->fetch();
 }
 
-$products = $pdo->query("
+$perPage = 25;
+$page = max(1, (int)($_GET['page'] ?? 1));
+$offset = ($page - 1) * $perPage;
+
+$totalProducts = (int)$pdo->query('SELECT COUNT(*) FROM products')->fetchColumn();
+$totalPages = max(1, (int)ceil($totalProducts / $perPage));
+if ($page > $totalPages) {
+    $page = $totalPages;
+    $offset = ($page - 1) * $perPage;
+}
+
+$stmt = $pdo->prepare("
     SELECT p.*, c.name as category_name,
            (SELECT image_path FROM product_images WHERE product_id = p.id AND is_primary = 1 LIMIT 1) as primary_image
     FROM products p
     LEFT JOIN categories c ON p.category_id = c.id
     ORDER BY p.created_at DESC
-")->fetchAll();
+    LIMIT :limit OFFSET :offset
+");
+$stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+$products = $stmt->fetchAll();
 
 $showForm = isset($_GET['action']) && $_GET['action'] === 'add' || $editProduct;
 
@@ -270,7 +286,7 @@ require __DIR__ . '/includes/header.php';
 <?php endif; ?>
 
 <div class="card">
-    <h2>All Products (<?= count($products) ?>)</h2>
+    <h2>All Products (<?= $totalProducts ?>)</h2>
     <?php if (empty($products)): ?>
         <p style="color: var(--text-muted);">No products yet. Add your first product above.</p>
     <?php else: ?>
@@ -299,7 +315,7 @@ require __DIR__ . '/includes/header.php';
                     <td><?= $p['is_active'] ? '<span class="badge badge-resolved">Active</span>' : '<span class="badge badge-spam">Inactive</span>' ?></td>
                     <td class="actions">
                         <a href="products.php?edit=<?= (int)$p['id'] ?>" class="btn btn-sm btn-primary">Edit</a>
-                        <form method="POST" style="display:inline" onsubmit="return confirm('Delete this product?')">
+                        <form method="POST" class="form-inline" data-confirm="Delete this product?">
                             <?= csrf_field() ?>
                             <input type="hidden" name="delete_id" value="<?= (int)$p['id'] ?>">
                             <button type="submit" class="btn btn-sm btn-danger">Delete</button>
@@ -309,6 +325,17 @@ require __DIR__ . '/includes/header.php';
                 <?php endforeach; ?>
             </tbody>
         </table>
+        <?php if ($totalPages > 1): ?>
+        <nav class="pagination" aria-label="Product pages">
+            <?php if ($page > 1): ?>
+                <a href="?page=<?= $page - 1 ?>" class="btn btn-sm">← Previous</a>
+            <?php endif; ?>
+            <span class="pagination-info">Page <?= $page ?> of <?= $totalPages ?></span>
+            <?php if ($page < $totalPages): ?>
+                <a href="?page=<?= $page + 1 ?>" class="btn btn-sm btn-primary">Next →</a>
+            <?php endif; ?>
+        </nav>
+        <?php endif; ?>
     <?php endif; ?>
 </div>
 

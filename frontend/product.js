@@ -27,15 +27,18 @@ function getCategoryIcon(slug) {
 
 function renderGallery(images, categorySlug, name) {
     if (images?.length) {
-        const thumbs = images.map((img, i) =>
-            `<button type="button" class="gallery-thumb ${i === 0 ? 'active' : ''}" data-src="${escapeHtml(img)}">
-                <img src="${escapeHtml(img)}" alt="${escapeHtml(name)}">
-            </button>`
-        ).join('');
+        const first = normalizeImage(images[0]);
+        const thumbs = images.map((img, i) => {
+            const n = normalizeImage(img);
+            const src = n.url || '';
+            return `<button type="button" class="gallery-thumb ${i === 0 ? 'active' : ''}" data-src="${escapeHtml(src)}" data-webp="${escapeHtml(n.webp_url || '')}">
+                ${pictureHtml(n.url, n.webp_url, name)}
+            </button>`;
+        }).join('');
         return `
             <div class="product-gallery">
                 <div class="gallery-main" id="galleryMain">
-                    <img src="${escapeHtml(images[0])}" alt="${escapeHtml(name)}" id="galleryMainImg">
+                    <span id="galleryMainImg">${pictureHtml(first.url, first.webp_url, name, 'gallery-main-img')}</span>
                 </div>
                 ${images.length > 1 ? `<div class="gallery-thumbs">${thumbs}</div>` : ''}
             </div>`;
@@ -91,7 +94,7 @@ function renderRelated(related) {
                     <a href="${productUrl(p.slug)}" class="related-card" target="_blank" rel="noopener noreferrer">
                         <div class="related-image">
                             ${p.image
-                                ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy">`
+                                ? pictureHtml(p.image, p.image_webp, p.name)
                                 : `<span>${getCategoryIcon('software')}</span>`}
                         </div>
                         <div class="related-info">
@@ -208,7 +211,7 @@ function renderProductPage(product) {
                         <label for="message">Message *</label>
                         <textarea id="message" name="message" required>I am interested in ${escapeHtml(product.name)}. Please send me pricing and availability.</textarea>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width:100%">Send Inquiry</button>
+                    <button type="submit" class="btn btn-primary btn-block">Send Inquiry</button>
                 </form>
             </div>
         </section>
@@ -240,7 +243,9 @@ function bindProductEvents(product) {
             document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
             thumb.classList.add('active');
             const mainImg = document.getElementById('galleryMainImg');
-            if (mainImg) mainImg.src = thumb.dataset.src;
+            if (mainImg) {
+                mainImg.innerHTML = pictureHtml(thumb.dataset.src, thumb.dataset.webp || null, product.name, 'gallery-main-img');
+            }
         });
     });
 

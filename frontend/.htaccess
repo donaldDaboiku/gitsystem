@@ -1,4 +1,4 @@
-# Frontend — clean URLs + security headers
+# Frontend — clean URLs + legacy .html support + security headers
 
 <IfModule mod_headers.c>
     Header always set X-Content-Type-Options "nosniff"
@@ -17,6 +17,17 @@
     RewriteCond %{HTTP_HOST} !^127\.0\.0\.1 [NC]
     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+    # Legacy .html → .php (bookmarks / search index)
+    RewriteRule ^index\.html$ index.php [L,R=301]
+    RewriteRule ^gitsystem\.html$ index.php [L,R=301]
+    RewriteRule ^product\.html$ product.php [L,QSA]
+
     # Clean product URLs: /frontend/product/slug-name
-    RewriteRule ^product/([a-z0-9-]+)/?$ product.html?slug=$1 [L,QSA]
+    RewriteRule ^product/([a-z0-9-]+)/?$ product.php?slug=$1 [L,QSA]
+
+    # Block PHP includes from direct web access
+    RewriteRule ^includes/ - [F,L]
+
+    # Directory index
+    DirectoryIndex index.php index.html
 </IfModule>

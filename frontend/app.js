@@ -31,7 +31,7 @@ function buildProductCard(product) {
         ? `<div class="product-badge ${badgeClass}">${escapeHtml(product.badge)}</div>`
         : '';
     const imageHtml = product.image
-        ? `<img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" loading="lazy">`
+        ? pictureHtml(product.image, product.image_webp, product.name)
         : '<div class="placeholder-image">📄</div>';
     const categoryLabel = product.category
         ? product.category.charAt(0).toUpperCase() + product.category.slice(1)

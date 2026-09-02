@@ -1,7 +1,11 @@
 <?php
 require_once dirname(__DIR__, 2) . '/config.php';
 requireLogin();
-send_security_headers();
+
+if (!defined('CSP_NONCE')) {
+    define('CSP_NONCE', base64_encode(random_bytes(16)));
+}
+send_security_headers(false, CSP_NONCE);
 
 $currentPage = basename($_SERVER['PHP_SELF'], '.php');
 ?>

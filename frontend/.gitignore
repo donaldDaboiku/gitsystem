@@ -1,0 +1,3 @@
+# Ignore built frontend assets (regenerate with build script)
+dist/
+assets-manifest.json

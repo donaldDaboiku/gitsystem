@@ -17,6 +17,12 @@ if (!defined('WEB_BASE_PATH')) define('WEB_BASE_PATH', '');
 if (!defined('ADMIN_PATH')) define('ADMIN_PATH', '/admin');
 if (!defined('UPLOAD_WEB_PATH')) define('UPLOAD_WEB_PATH', WEB_BASE_PATH . '/uploads');
 if (!defined('MAIL_FROM')) define('MAIL_FROM', '');
+if (!defined('SMTP_HOST')) define('SMTP_HOST', '');
+if (!defined('SMTP_PORT')) define('SMTP_PORT', 587);
+if (!defined('SMTP_USER')) define('SMTP_USER', '');
+if (!defined('SMTP_PASS')) define('SMTP_PASS', '');
+if (!defined('SMTP_SECURE')) define('SMTP_SECURE', 'tls'); // tls | ssl | empty
+if (!defined('IMAGE_MAX_WIDTH')) define('IMAGE_MAX_WIDTH', 1600);
 
 define('ADMIN_URL', SITE_URL . ADMIN_PATH);
 define('UPLOAD_PATH', __DIR__ . '/uploads/');
@@ -115,27 +121,123 @@ function uploadImage($file, $folder = 'products') {
         return ['success' => false, 'message' => 'Invalid file extension'];
     }
 
-    $filename = bin2hex(random_bytes(8)) . '_' . time() . '.' . $extension;
+    $basename = bin2hex(random_bytes(8)) . '_' . time();
+    $filename = $basename . '.' . $extension;
     $filepath = $uploadDir . $filename;
 
-    if (move_uploaded_file($file['tmp_name'], $filepath)) {
-        return [
-            'success' => true,
-            'filename' => $filename,
-            'path' => $folder . '/' . $filename,
-            'url' => UPLOAD_URL . $folder . '/' . $filename
-        ];
+    if (!move_uploaded_file($file['tmp_name'], $filepath)) {
+        return ['success' => false, 'message' => 'Failed to move uploaded file'];
     }
 
-    return ['success' => false, 'message' => 'Failed to move uploaded file'];
+    $relativePath = $folder . '/' . $filename;
+    $webpPath = processUploadedImage($filepath, $mimeType, $uploadDir, $basename);
+
+    return [
+        'success' => true,
+        'filename' => $filename,
+        'path' => $relativePath,
+        'webp_path' => $webpPath,
+        'url' => UPLOAD_URL . $relativePath,
+        'webp_url' => $webpPath ? UPLOAD_URL . $webpPath : null,
+    ];
 }
 
-function deleteImage($path) {
+/**
+ * Resize original (max width) and write WebP variant. Returns relative webp path or null.
+ */
+function processUploadedImage(string $filepath, string $mimeType, string $uploadDir, string $basename): ?string {
+    if (!extension_loaded('gd')) {
+        return null;
+    }
+
+    $image = loadGdImage($filepath, $mimeType);
+    if (!$image) {
+        return null;
+    }
+
+    $width = imagesx($image);
+    $height = imagesy($image);
+    $maxW = (int)IMAGE_MAX_WIDTH;
+
+    if ($width > $maxW) {
+        $newW = $maxW;
+        $newH = (int)round($height * ($maxW / $width));
+        $resized = imagescale($image, $newW, $newH, IMG_BILINEAR_FIXED);
+        if ($resized) {
+            imagedestroy($image);
+            $image = $resized;
+            saveGdImage($image, $filepath, $mimeType);
+        }
+    }
+
+    $webpPath = null;
+    if (function_exists('imagewebp')) {
+        $webpFile = $uploadDir . $basename . '.webp';
+        if (@imagewebp($image, $webpFile, 82)) {
+            $folder = trim(str_replace('\\', '/', str_replace(rtrim(UPLOAD_PATH, '/\\') . DIRECTORY_SEPARATOR, '', $uploadDir)), '/\\');
+            $webpPath = ($folder !== '' ? $folder . '/' : '') . $basename . '.webp';
+        }
+    }
+
+    imagedestroy($image);
+    return $webpPath;
+}
+
+function loadGdImage(string $path, string $mimeType) {
+    return match ($mimeType) {
+        'image/jpeg' => @imagecreatefromjpeg($path),
+        'image/png' => @imagecreatefrompng($path),
+        'image/webp' => function_exists('imagecreatefromwebp') ? @imagecreatefromwebp($path) : false,
+        'image/gif' => @imagecreatefromgif($path),
+        default => false,
+    };
+}
+
+function saveGdImage($image, string $path, string $mimeType): bool {
+    return match ($mimeType) {
+        'image/jpeg' => @imagejpeg($image, $path, 85),
+        'image/png' => @imagepng($image, $path, 6),
+        'image/webp' => function_exists('imagewebp') ? @imagewebp($image, $path, 82) : false,
+        'image/gif' => @imagegif($image, $path),
+        default => false,
+    };
+}
+
+function image_webp_path(?string $relativePath, ?string $storedWebp = null): ?string {
+    if ($storedWebp) {
+        return $storedWebp;
+    }
+    if (!$relativePath) {
+        return null;
+    }
+    $webp = preg_replace('/\.[^.]+$/', '.webp', $relativePath);
+    return ($webp && file_exists(UPLOAD_PATH . $webp)) ? $webp : null;
+}
+
+function format_image_urls(?string $path, ?string $webpPath = null): array {
+    if (!$path) {
+        return ['url' => null, 'webp_url' => null];
+    }
+    $webp = image_webp_path($path, $webpPath);
+    return [
+        'url' => UPLOAD_URL . $path,
+        'webp_url' => $webp ? UPLOAD_URL . $webp : null,
+    ];
+}
+
+function deleteImage($path, $webpPath = null) {
     $fullPath = UPLOAD_PATH . $path;
     if (file_exists($fullPath)) {
-        return unlink($fullPath);
+        unlink($fullPath);
     }
-    return false;
+    $webp = image_webp_path($path, $webpPath);
+    if ($webp) {
+        $webpFull = UPLOAD_PATH . $webp;
+        if (file_exists($webpFull)) {
+            unlink($webpFull);
+        }
+    }
+    return true;
 }
 
 function generateSlug($string) {

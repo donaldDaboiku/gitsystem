@@ -29,6 +29,23 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+/** Normalize API image (string URL or {url, webp_url}). */
+function normalizeImage(img) {
+    if (!img) return { url: null, webp_url: null };
+    if (typeof img === 'string') return { url: img, webp_url: null };
+    return { url: img.url || null, webp_url: img.webp_url || null };
+}
+
+function pictureHtml(src, webp, alt, className = '') {
+    const img = normalizeImage(typeof src === 'object' ? src : { url: src, webp_url: webp });
+    if (!img.url) return '';
+    const cls = className ? ` class="${className}"` : '';
+    if (img.webp_url) {
+        return `<picture><source srcset="${escapeHtml(img.webp_url)}" type="image/webp"><img src="${escapeHtml(img.url)}" alt="${escapeHtml(alt)}"${cls} loading="lazy"></picture>`;
+    }
+    return `<img src="${escapeHtml(img.url)}" alt="${escapeHtml(alt)}"${cls} loading="lazy">`;
+}
+
 function productUrl(slug) {
     if (!slug) return `${FRONTEND_BASE}/index.html#products`;
     return `${FRONTEND_BASE}/product/${slug}`;

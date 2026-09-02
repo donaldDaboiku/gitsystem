@@ -12,7 +12,7 @@ $frontend = $base . '/frontend';
 
 $urls = [
     ['loc' => $frontend . '/', 'priority' => '1.0', 'changefreq' => 'weekly'],
-    ['loc' => $frontend . '/index.html', 'priority' => '1.0', 'changefreq' => 'weekly'],
+    ['loc' => $frontend . '/index.php', 'priority' => '1.0', 'changefreq' => 'weekly'],
     ['loc' => $frontend . '/#software', 'priority' => '0.8', 'changefreq' => 'weekly'],
     ['loc' => $frontend . '/#products', 'priority' => '0.8', 'changefreq' => 'weekly'],
     ['loc' => $frontend . '/#contact', 'priority' => '0.6', 'changefreq' => 'monthly'],

@@ -326,6 +326,10 @@
             box-shadow: 0 16px 40px rgba(20, 217, 154, 0.25);
             filter: brightness(1.05);
         }
+
+        .btn-block {
+            width: 100%;
+        }
         
         .btn-secondary {
             background: transparent;
