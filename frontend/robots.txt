@@ -3,4 +3,4 @@ Allow: /
 
 Disallow: /backend/admin/
 
-Sitemap: https://yourdomain.com/sitemap.php
+Sitemap: https://gitsystemng.com/sitemap.php

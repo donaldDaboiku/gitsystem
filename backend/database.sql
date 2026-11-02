@@ -1,8 +1,12 @@
 -- GITSYSTEMNG Database Schema
 -- Run this SQL in your MySQL database via phpMyAdmin or command line
+--
+-- Namecheap / cPanel: select your database first (e.g. gitsrcgt_gitsystemng),
+-- then import. Do NOT run CREATE DATABASE — cPanel already created the DB.
 
-CREATE DATABASE IF NOT EXISTS gitsystemng CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE gitsystemng;
+-- Local Laragon only (optional):
+-- CREATE DATABASE IF NOT EXISTS gitsystemng CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- USE gitsystemng;
 
 -- Admin users table
 CREATE TABLE IF NOT EXISTS admin_users (

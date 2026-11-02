@@ -6,4 +6,4 @@ Disallow: /backend/storage/
 Disallow: /backend/config.php
 Disallow: /backend/config.local.php
 
-Sitemap: https://yourdomain.com/sitemap.php
+Sitemap: https://gitsystemng.com/sitemap.php

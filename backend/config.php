@@ -6,17 +6,17 @@ if (is_readable(__DIR__ . '/config.local.php')) {
 
 // Database — overridden by config.local.php when present
 if (!defined('DB_HOST')) define('DB_HOST', 'localhost');
-if (!defined('DB_NAME')) define('DB_NAME', 'gitsystemng');
-if (!defined('DB_USER')) define('DB_USER', 'your_db_username');
-if (!defined('DB_PASS')) define('DB_PASS', 'your_db_password');
+if (!defined('DB_NAME')) define('DB_NAME', 'gitsrcgt_gitsystemng');
+if (!defined('DB_USER')) define('DB_USER', 'gitsrcgt_YOUR_USER');
+if (!defined('DB_PASS')) define('DB_PASS', 'Olaorbit@84');
 if (!defined('DB_CHARSET')) define('DB_CHARSET', 'utf8mb4');
 
-// Site — Namecheap: set SITE_URL to https://yourdomain.com
-if (!defined('SITE_URL')) define('SITE_URL', 'https://yourdomain.com');
-if (!defined('WEB_BASE_PATH')) define('WEB_BASE_PATH', '');
-if (!defined('ADMIN_PATH')) define('ADMIN_PATH', '/admin');
-if (!defined('UPLOAD_WEB_PATH')) define('UPLOAD_WEB_PATH', WEB_BASE_PATH . '/uploads');
-if (!defined('MAIL_FROM')) define('MAIL_FROM', '');
+// Site — Namecheap production defaults (config.local.php overrides locally)
+if (!defined('SITE_URL')) define('SITE_URL', 'https://gitsystemng.com');
+if (!defined('WEB_BASE_PATH')) define('WEB_BASE_PATH', '/backend');
+if (!defined('ADMIN_PATH')) define('ADMIN_PATH', '/backend/admin');
+if (!defined('UPLOAD_WEB_PATH')) define('UPLOAD_WEB_PATH', '/backend/uploads');
+if (!defined('MAIL_FROM')) define('MAIL_FROM', 'noreply@gitsystemng.com');
 if (!defined('SMTP_HOST')) define('SMTP_HOST', '');
 if (!defined('SMTP_PORT')) define('SMTP_PORT', 587);
 if (!defined('SMTP_USER')) define('SMTP_USER', '');
@@ -41,7 +41,7 @@ define('INQUIRY_WINDOW_SECONDS', 3600);   // 1 hour
 date_default_timezone_set('Africa/Lagos');
 
 // Error Reporting — set APP_DEBUG to true during local development only
-if (!defined('APP_DEBUG')) define('APP_DEBUG', false);
+if (!defined('APP_DEBUG')) define('APP_DEBUG', true);
 error_reporting(APP_DEBUG ? E_ALL : 0);
 ini_set('display_errors', APP_DEBUG ? '1' : '0');
 
