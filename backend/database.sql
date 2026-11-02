@@ -1,12 +1,23 @@
 -- GITSYSTEMNG Database Schema
 -- Run this SQL in your MySQL database via phpMyAdmin or command line
 --
--- Namecheap / cPanel: select your database first (e.g. gitsrcgt_gitsystemng),
--- then import. Do NOT run CREATE DATABASE — cPanel already created the DB.
-
--- Local Laragon only (optional):
+-- IMPORTANT: Select the target database in phpMyAdmin BEFORE importing
+-- (e.g. gitsystemng locally, or gitsrcgt_gitsystemng on Namecheap).
+-- Do NOT run CREATE DATABASE on cPanel — the DB is already created there.
+--
+-- Local Laragon (optional, one-time):
 -- CREATE DATABASE IF NOT EXISTS gitsystemng CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
--- USE gitsystemng;
+
+-- Abort loudly if no database is selected (prevents creating tables in the wrong place)
+SET @selected_db := DATABASE();
+SET @require_db_sql := IF(
+    @selected_db IS NULL OR @selected_db = '',
+    'SIGNAL SQLSTATE ''45000'' SET MESSAGE_TEXT = ''No database selected. Click your database on the left in phpMyAdmin, then Import again.''',
+    'SELECT 1'
+);
+PREPARE require_db_stmt FROM @require_db_sql;
+EXECUTE require_db_stmt;
+DEALLOCATE PREPARE require_db_stmt;
 
 -- Admin users table
 CREATE TABLE IF NOT EXISTS admin_users (

@@ -15,10 +15,10 @@ define('DB_PASS', 'REPLACE_WITH_CPANEL_DB_PASSWORD');
 
 define('SITE_URL', 'https://gitsystemng.com');
 define('WEB_BASE_PATH', '/backend');
-define('ADMIN_PATH', '/backend/admin');
-define('UPLOAD_WEB_PATH', '/backend/uploads');
+define('ADMIN_PATH', WEB_BASE_PATH . '/admin');
+define('UPLOAD_WEB_PATH', WEB_BASE_PATH . '/uploads');
 
-define('APP_DEBUG', false);
+define('APP_DEBUG', false); // never true on the live server
 define('MAIL_FROM', 'noreply@gitsystemng.com');
 
 // Optional SMTP (Namecheap email or another SMTP provider)
