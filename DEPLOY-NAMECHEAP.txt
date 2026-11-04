@@ -1,5 +1,7 @@
 # Namecheap production checklist for GITSYSTEM
-# Replace yourdomain.com everywhere after purchase.
+# Domain: gitsystemng.com
+# Live DB name: gitsrcgt_gitsystemng
+# If site shows 503 → see FIX-503-NAMECHEAP.txt (set real DB_USER/DB_PASS on server)
 
 ## A. Local (already implemented in code)
 - [x] Session hardening (HttpOnly, SameSite, regenerate on login)

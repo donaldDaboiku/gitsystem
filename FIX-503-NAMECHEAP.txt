@@ -1,0 +1,38 @@
+# Fix gitsystemng.com 503 (Database connection)
+
+The site returns 503 because backend/config.php on the server still has
+placeholder DB_USER / DB_PASS (not your real cPanel MySQL user).
+
+## Do this in Namecheap cPanel (2 minutes)
+
+1. cPanel → MySQL Databases
+   - Confirm database: gitsrcgt_gitsystemng
+   - Note Current Users (full name, e.g. gitsrcgt_admin)
+   - Confirm that user is listed under "Current Databases" for
+     gitsrcgt_gitsystemng with ALL PRIVILEGES
+   - If the user is missing: Add User To Database → ALL PRIVILEGES
+
+2. cPanel → File Manager → public_html → backend → config.php → Edit
+
+3. Change ONLY these lines (keep the rest of the file):
+
+   if (!defined('DB_HOST')) define('DB_HOST', 'localhost');
+   if (!defined('DB_NAME')) define('DB_NAME', 'gitsrcgt_gitsystemng');
+   if (!defined('DB_USER')) define('DB_USER', 'gitsrcgt_YOUR_REAL_USER');
+   if (!defined('DB_PASS')) define('DB_PASS', 'YOUR_REAL_MYSQL_PASSWORD');
+   if (!defined('SITE_URL')) define('SITE_URL', 'https://gitsystemng.com');
+   if (!defined('APP_DEBUG')) define('APP_DEBUG', false);
+
+4. Save → open https://gitsystemng.com/
+
+5. If still 503: temporarily set APP_DEBUG to true, reload once,
+   read the real error, then set APP_DEBUG back to false.
+
+## After it loads
+
+- Admin: https://gitsystemng.com/backend/admin/login.php
+- Change admin password in Settings
+- Set site_email in Settings
+- Confirm HTTPS works
+
+DO NOT upload config.local.php to the server.
