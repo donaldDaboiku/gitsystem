@@ -13,14 +13,14 @@
 
     <header id="header">
         <nav>
-            <a href="index.php" class="logo" aria-label="GITSYSTEM home">
-                <img src="assets/gitsystem-logo.png" alt="GITSYSTEM" class="logo-img" width="200" height="40">
+            <a href="/" class="logo" aria-label="GITSYSTEM home">
+                <img src="/frontend/assets/gitsystem-logo.png" alt="GITSYSTEM" class="logo-img" width="200" height="40">
             </a>
             <ul class="nav-links" id="navLinks">
-                <li><a href="index.php#home">Home</a></li>
-                <li><a href="index.php#services">Services</a></li>
-                <li><a href="index.php#products">Products</a></li>
-                <li><a href="index.php#contact">Contact</a></li>
+                <li><a href="/#home">Home</a></li>
+                <li><a href="/#services">Services</a></li>
+                <li><a href="/#products">Products</a></li>
+                <li><a href="/#contact">Contact</a></li>
             </ul>
             <div class="mobile-toggle" id="mobileToggle">
                 <span></span><span></span><span></span>
@@ -49,7 +49,7 @@
     </div>
 
     <footer class="product-footer-mini">
-        <p>&copy; <span id="currentYear"></span> GITSYSTEM — <a href="index.php">Back to home</a></p>
+        <p>&copy; <span id="currentYear"></span> GITSYSTEM — <a href="/">Back to home</a></p>
     </footer>
 
     <button class="scroll-top" id="scrollTop">↑</button>

@@ -130,11 +130,11 @@ function renderProductPage(product) {
     const main = document.getElementById('productMain');
     main.innerHTML = `
         <nav class="breadcrumb">
-            <a href="index.html">Home</a>
+            <a href="/">Home</a>
             <span>/</span>
-            <a href="index.html#products">Products</a>
+            <a href="/#products">Products</a>
             <span>/</span>
-            <a href="index.html#products">${escapeHtml(product.category || '')}</a>
+            <a href="/#products">${escapeHtml(product.category || '')}</a>
             <span>/</span>
             <span>${escapeHtml(product.name)}</span>
         </nav>
@@ -269,7 +269,7 @@ function renderNotFound() {
         <div class="product-not-found">
             <h1>Product Not Found</h1>
             <p>The product you're looking for doesn't exist or has been removed.</p>
-            <a href="index.html#products" class="btn btn-primary">Browse Products</a>
+            <a href="/#products" class="btn btn-primary">Browse Products</a>
         </div>`;
 }
 

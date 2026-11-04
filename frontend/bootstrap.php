@@ -6,8 +6,12 @@ require_once __DIR__ . '/../backend/config.php';
 send_security_headers();
 
 function frontend_url(string $path = ''): string {
-    $base = rtrim(SITE_URL, '/') . '/frontend';
-    return $path === '' ? $base . '/' : $base . '/' . ltrim($path, '/');
+    $base = rtrim(SITE_URL, '/');
+    $path = ltrim($path, '/');
+    if ($path === '' || $path === 'index.php' || $path === 'index.html') {
+        return $base . '/';
+    }
+    return $base . '/frontend/' . $path;
 }
 
 function frontend_h(string $value): string {
@@ -26,10 +30,8 @@ function asset_url(string $logicalName): string {
             : [];
     }
     $entry = $manifest[$logicalName] ?? null;
-    if ($entry && !empty($entry['file'])) {
-        return 'dist/' . $entry['file'];
-    }
-    return $logicalName;
+    $rel = ($entry && !empty($entry['file'])) ? 'dist/' . $entry['file'] : $logicalName;
+    return '/frontend/' . ltrim($rel, '/');
 }
 
 function asset_tag_css(string $logicalName): string {

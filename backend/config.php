@@ -8,7 +8,7 @@ if (is_readable(__DIR__ . '/config.local.php')) {
 // NEVER commit real passwords or cPanel DB names into this file.
 if (!defined('DB_HOST')) define('DB_HOST', 'localhost');
 if (!defined('DB_NAME')) define('DB_NAME', 'gitsystemng');
-if (!defined('DB_USER')) define('DB_USER', 'your_db_username');
+if (!defined('DB_USER')) define('DB_USER', 'gitsrcgt_gitsystemng');
 if (!defined('DB_PASS')) define('DB_PASS', 'your_db_password');
 if (!defined('DB_CHARSET')) define('DB_CHARSET', 'utf8mb4');
 

@@ -16,8 +16,8 @@
     <!-- Header -->
     <header id="header">
         <nav>
-            <a href="index.php" class="logo" aria-label="GITSYSTEM home">
-                <img src="assets/gitsystem-logo.png" alt="GITSYSTEM — Greenpasture Integrated Technology" class="logo-img" width="220" height="44">
+            <a href="/" class="logo" aria-label="GITSYSTEM home">
+                <img src="/frontend/assets/gitsystem-logo.png" alt="GITSYSTEM — Greenpasture Integrated Technology" class="logo-img" width="220" height="44">
             </a>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#home">Home</a></li>
@@ -369,7 +369,7 @@
     <footer>
         <div class="footer-content">
             <div class="footer-section">
-                <img src="assets/gitsystem-wordmark.png" alt="GITSYSTEM" class="logo-img footer-logo" width="180" height="36">
+                <img src="/frontend/assets/gitsystem-wordmark.png" alt="GITSYSTEM" class="logo-img footer-logo" width="180" height="36">
                 <p><span data-setting="site_name">GITSYSTEM</span> — Greenpasture Integrated Technology. Your trusted partner for IT solutions, training, and consultation.</p>
             </div>
             

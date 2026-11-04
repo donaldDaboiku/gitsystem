@@ -11,11 +11,10 @@ $base = rtrim(SITE_URL, '/');
 $frontend = $base . '/frontend';
 
 $urls = [
-    ['loc' => $frontend . '/', 'priority' => '1.0', 'changefreq' => 'weekly'],
-    ['loc' => $frontend . '/index.php', 'priority' => '1.0', 'changefreq' => 'weekly'],
-    ['loc' => $frontend . '/#software', 'priority' => '0.8', 'changefreq' => 'weekly'],
-    ['loc' => $frontend . '/#products', 'priority' => '0.8', 'changefreq' => 'weekly'],
-    ['loc' => $frontend . '/#contact', 'priority' => '0.6', 'changefreq' => 'monthly'],
+    ['loc' => $base . '/', 'priority' => '1.0', 'changefreq' => 'weekly'],
+    ['loc' => $base . '/#software', 'priority' => '0.8', 'changefreq' => 'weekly'],
+    ['loc' => $base . '/#products', 'priority' => '0.8', 'changefreq' => 'weekly'],
+    ['loc' => $base . '/#contact', 'priority' => '0.6', 'changefreq' => 'monthly'],
 ];
 
 try {

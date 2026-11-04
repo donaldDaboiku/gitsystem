@@ -25,5 +25,5 @@ $metaDesc = 'View product details, pricing, and request a quote from GITSYSTEM.'
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="icon" href="assets/gitsystem-icon.png" type="image/png">
+    <link rel="icon" href="/frontend/assets/gitsystem-icon.png" type="image/png">
     <?= asset_tag_css('style.css') ?>

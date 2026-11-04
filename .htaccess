@@ -18,7 +18,15 @@
     RewriteCond %{HTTP_HOST} !^127\.0\.0\.1 [NC]
     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # HSTS only after HTTPS is on (set via PHP/headers on HTTPS too)
+    # Homepage is https://gitsystemng.com/ — drop /frontend/index.php from the address bar
+    RewriteCond %{THE_REQUEST} \s/+frontend/index\.(php|html)[\s?] [NC]
+    RewriteRule ^frontend/index\.(php|html)$ / [R=301,L]
+
+    RewriteCond %{THE_REQUEST} \s/+frontend/?[\s?] [NC]
+    RewriteRule ^frontend/?$ / [R=301,L]
+
+    RewriteCond %{THE_REQUEST} \s/+index\.php[\s?] [NC]
+    RewriteRule ^index\.php$ / [R=301,L]
 </IfModule>
 
 # Block hidden / sensitive paths if ever exposed at root

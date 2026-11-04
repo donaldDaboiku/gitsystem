@@ -47,7 +47,7 @@ function pictureHtml(src, webp, alt, className = '') {
 }
 
 function productUrl(slug) {
-    if (!slug) return `${FRONTEND_BASE}/index.html#products`;
+    if (!slug) return '/#products';
     return `${FRONTEND_BASE}/product/${slug}`;
 }
 

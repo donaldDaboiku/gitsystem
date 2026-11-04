@@ -8,7 +8,7 @@ $metaDesc = 'Professional IT solutions, hardware/software services, networking, 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GITSYSTEM - Greenpasture Integrated Technology</title>
     <meta name="description" content="<?= frontend_h($metaDesc) ?>">
-    <link rel="icon" href="assets/gitsystem-icon.png" type="image/png">
+    <link rel="icon" href="/frontend/assets/gitsystem-icon.png" type="image/png">
     <link rel="canonical" href="<?= frontend_h($canonical) ?>">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="GITSYSTEM">
