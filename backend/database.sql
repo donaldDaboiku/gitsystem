@@ -165,28 +165,13 @@ CREATE TABLE IF NOT EXISTS activity_log (
     INDEX idx_created (created_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Sample products (matches frontend catalog)
+-- Software products. Add hardware in Admin when you have real stock.
 INSERT INTO products (category_id, name, slug, short_description, description, price, badge, is_featured, stock_quantity, is_external_app, learn_url, launch_url, logo_url, brand_color, price_label) VALUES
 (2, 'GITInvoice', 'gitinvoice', 'Online invoicing & payment tracking for businesses', 'GITInvoice is our cloud invoicing platform. Create professional invoices, track payments, and manage clients online.', 35000.00, 'Live', 1, 99, 1, 'https://git-invoice-three.vercel.app/', 'https://git-invoice-three.vercel.app/app', 'https://git-invoice-three.vercel.app/icons/icon-192-maskable.png', '#ff6b35', 'Try free · 3 invoices'),
 (2, 'ChurchMS', 'churchms', 'Church management system for congregations', 'ChurchMS helps churches manage members, attendance, giving, events, and communications from one place.', 1.00, 'Live', 1, 99, 1, '', '', '', '#109d48', 'Launch ChurchMS'),
 (2, 'SMS - School Management System', 'sms-school-management-system', 'School management software for schools', 'End-to-end school administration: admissions, fees, attendance, and grading.', 850000.00, 'New', 1, 10, 0, NULL, NULL, NULL, NULL, NULL),
 (2, 'HMS - Hospital Management System', 'hms-hospital-management-system', 'Hospital management software for hospitals', 'Patient records, appointments, billing, and pharmacy management.', 1200000.00, 'New', 1, 5, 0, NULL, NULL, NULL, NULL, NULL),
-(2, 'FSM - Fashion Management System', 'fsm-fashion-management-system', 'Fashion management software for fashion businesses', 'Inventory, orders, and customer management for fashion retailers.', 500000.00, 'New', 0, 15, 0, NULL, NULL, NULL, NULL, NULL),
-(1, 'Dell Latitude 5420', 'dell-latitude-5420', 'Intel Core i5, 16GB RAM, 512GB SSD', 'Business laptop with Intel Core i5, 16GB RAM, 512GB SSD.', 450000.00, 'New', 1, 8, 0, NULL, NULL, NULL, NULL, NULL),
-(1, 'HP ProBook 450 G8', 'hp-probook-450-g8', 'Intel Core i7, 16GB RAM, 1TB SSD', 'Reliable business laptop with Intel Core i7, 16GB RAM, 1TB SSD.', 580000.00, NULL, 0, 6, 0, NULL, NULL, NULL, NULL, NULL),
-(1, 'Lenovo ThinkPad T14', 'lenovo-thinkpad-t14', 'AMD Ryzen 7, 32GB RAM, 512GB SSD', 'Professional laptop with AMD Ryzen 7, 32GB RAM, 512GB SSD.', 520000.00, 'Sale', 1, 4, 0, NULL, NULL, NULL, NULL, NULL),
-(3, 'Logitech MX Master 3S', 'logitech-mx-master-3s', 'Ergonomic, 8K DPI, Multi-device', 'Premium wireless mouse with ergonomic design and multi-device support.', 45000.00, NULL, 0, 25, 0, NULL, NULL, NULL, NULL, NULL),
-(3, 'Keychron K8 Pro', 'keychron-k8-pro', 'Hot-swappable, RGB, Wireless', 'Mechanical keyboard with hot-swappable switches and wireless connectivity.', 65000.00, 'Popular', 1, 20, 0, NULL, NULL, NULL, NULL, NULL),
-(3, 'Sony WH-1000XM5', 'sony-wh-1000xm5', 'Premium audio, 30hr battery', 'Industry-leading noise cancelling headphones with 30-hour battery.', 180000.00, NULL, 0, 12, 0, NULL, NULL, NULL, NULL, NULL),
-(4, 'UniFi Dream Machine', 'unifi-dream-machine', 'Enterprise router with WiFi 6', 'All-in-one network security gateway with WiFi 6.', 250000.00, NULL, 0, 7, 0, NULL, NULL, NULL, NULL, NULL),
-(4, 'TP-Link Omada EAP660 HD', 'tp-link-omada-eap660-hd', '3.6 Gbps, PoE, Ceiling Mount', 'WiFi 6 access point with 3.6 Gbps throughput and PoE support.', 95000.00, 'New', 0, 15, 0, NULL, NULL, NULL, NULL, NULL),
-(4, 'Cisco SG350-28P', 'cisco-sg350-28p', '28-port Gigabit with 24 PoE+', 'Managed PoE switch with 28 Gigabit ports.', 380000.00, NULL, 0, 5, 0, NULL, NULL, NULL, NULL, NULL),
-(5, 'NVIDIA RTX 4060 Ti', 'nvidia-rtx-4060-ti', '8GB GDDR6, Ray Tracing', 'High-performance graphics card with 8GB GDDR6 and ray tracing.', 320000.00, 'Sale', 1, 9, 0, NULL, NULL, NULL, NULL, NULL),
-(5, 'Intel Core i7-13700K', 'intel-core-i7-13700k', '16-core, 24-thread, 5.4GHz', 'Desktop processor with 16 cores and up to 5.4GHz boost.', 280000.00, NULL, 0, 11, 0, NULL, NULL, NULL, NULL, NULL),
-(5, 'Samsung 990 PRO', 'samsung-990-pro', '2TB, 7450MB/s read speed', 'NVMe SSD with 2TB capacity and 7450MB/s read speed.', 145000.00, 'Popular', 1, 18, 0, NULL, NULL, NULL, NULL, NULL),
-(6, 'LG UltraGear 27" 4K', 'lg-ultragear-27-4k', '144Hz, 1ms, HDR400', '27-inch 4K gaming monitor with 144Hz refresh rate.', 380000.00, NULL, 0, 6, 0, NULL, NULL, NULL, NULL, NULL),
-(6, 'Shure MV7', 'shure-mv7', 'Podcast & streaming quality', 'Professional USB/XLR microphone for podcasting and streaming.', 125000.00, 'New', 0, 10, 0, NULL, NULL, NULL, NULL, NULL),
-(6, 'Logitech C920 Pro HD', 'logitech-c920-pro-hd', '1080p, auto-focus, stereo audio', 'Full HD webcam with auto-focus and stereo audio.', 42000.00, NULL, 0, 30, 0, NULL, NULL, NULL, NULL, NULL);
+(2, 'FSM - Fashion Management System', 'fsm-fashion-management-system', 'Fashion management software for fashion businesses', 'Inventory, orders, and customer management for fashion retailers.', 500000.00, 'New', 0, 15, 0, NULL, NULL, NULL, NULL, NULL);
 
 -- Product specifications for software solutions
 INSERT INTO product_specs (product_id, spec_name, spec_value, display_order)

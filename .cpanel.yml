@@ -1,0 +1,10 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/gitsrcgt/public_html/
+    - /bin/cp $DEPLOYPATH/backend/config.php /home/gitsrcgt/config.php.live
+    - /bin/cp index.php sitemap.php robots.txt $DEPLOYPATH
+    - /bin/cp .htaccess $DEPLOYPATH
+    - /bin/cp -R frontend $DEPLOYPATH
+    - /bin/cp -R backend $DEPLOYPATH
+    - /bin/cp /home/gitsrcgt/config.php.live $DEPLOYPATH/backend/config.php

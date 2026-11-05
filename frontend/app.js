@@ -1,26 +1,3 @@
-const FALLBACK_PRODUCTS = [
-    { id: 1, slug: 'gitinvoice', name: 'GITInvoice', category: 'software', short_description: 'Online invoicing & payment tracking for businesses', price: 35000, badge: 'Live', is_external_app: true, learn_url: 'https://git-invoice-three.vercel.app/', launch_url: 'https://git-invoice-three.vercel.app/app', logo_url: 'https://git-invoice-three.vercel.app/icons/icon-192-maskable.png', brand_color: '#ff6b35', price_label: 'Try free · 3 invoices' },
-    { id: 20, slug: 'churchms', name: 'ChurchMS', category: 'software', short_description: 'Church management system for congregations', price: 1, badge: 'Live', is_external_app: true, learn_url: '', launch_url: '', logo_url: '', brand_color: '#109d48', price_label: 'Launch ChurchMS' },
-    { id: 2, slug: 'sms-school-management-system', name: 'SMS - School Management System', category: 'software', short_description: 'School management software for schools', price: 850000, badge: 'New' },
-    { id: 3, slug: 'hms-hospital-management-system', name: 'HMS - Hospital Management System', category: 'software', short_description: 'Hospital management software for hospitals', price: 1200000, badge: 'New' },
-    { id: 4, slug: 'fsm-fashion-management-system', name: 'FSM - Fashion Management System', category: 'software', short_description: 'Fashion management software for fashion businesses', price: 500000, badge: 'New' },
-    { id: 5, slug: 'dell-latitude-5420', name: 'Dell Latitude 5420', category: 'laptops', short_description: 'Intel Core i5, 16GB RAM, 512GB SSD', price: 450000, badge: 'New' },
-    { id: 6, slug: 'hp-probook-450-g8', name: 'HP ProBook 450 G8', category: 'laptops', short_description: 'Intel Core i7, 16GB RAM, 1TB SSD', price: 580000, badge: null },
-    { id: 7, slug: 'lenovo-thinkpad-t14', name: 'Lenovo ThinkPad T14', category: 'laptops', short_description: 'AMD Ryzen 7, 32GB RAM, 512GB SSD', price: 520000, badge: 'Sale' },
-    { id: 8, slug: 'logitech-mx-master-3s', name: 'Logitech MX Master 3S', category: 'accessories', short_description: 'Ergonomic, 8K DPI, Multi-device', price: 45000, badge: null },
-    { id: 9, slug: 'keychron-k8-pro', name: 'Keychron K8 Pro', category: 'accessories', short_description: 'Hot-swappable, RGB, Wireless', price: 65000, badge: 'Popular' },
-    { id: 10, slug: 'sony-wh-1000xm5', name: 'Sony WH-1000XM5', category: 'accessories', short_description: 'Premium audio, 30hr battery', price: 180000, badge: null },
-    { id: 11, slug: 'unifi-dream-machine', name: 'UniFi Dream Machine', category: 'networking', short_description: 'Enterprise router with WiFi 6', price: 250000, badge: null },
-    { id: 12, slug: 'tp-link-omada-eap660-hd', name: 'TP-Link Omada EAP660 HD', category: 'networking', short_description: '3.6 Gbps, PoE, Ceiling Mount', price: 95000, badge: 'New' },
-    { id: 13, slug: 'cisco-sg350-28p', name: 'Cisco SG350-28P', category: 'networking', short_description: '28-port Gigabit with 24 PoE+', price: 380000, badge: null },
-    { id: 14, slug: 'nvidia-rtx-4060-ti', name: 'NVIDIA RTX 4060 Ti', category: 'components', short_description: '8GB GDDR6, Ray Tracing', price: 320000, badge: 'Sale' },
-    { id: 15, slug: 'intel-core-i7-13700k', name: 'Intel Core i7-13700K', category: 'components', short_description: '16-core, 24-thread, 5.4GHz', price: 280000, badge: null },
-    { id: 16, slug: 'samsung-990-pro', name: 'Samsung 990 PRO', category: 'components', short_description: '2TB, 7450MB/s read speed', price: 145000, badge: 'Popular' },
-    { id: 17, slug: 'lg-ultragear-27-4k', name: 'LG UltraGear 27" 4K', category: 'peripherals', short_description: '144Hz, 1ms, HDR400', price: 380000, badge: null },
-    { id: 18, slug: 'shure-mv7', name: 'Shure MV7', category: 'peripherals', short_description: 'Podcast & streaming quality', price: 125000, badge: 'New' },
-    { id: 19, slug: 'logitech-c920-pro-hd', name: 'Logitech C920 Pro HD', category: 'peripherals', short_description: '1080p, auto-focus, stereo audio', price: 42000, badge: null }
-];
-
 let allProducts = [];
 let activeCategory = 'all';
 
@@ -253,15 +230,17 @@ async function loadProducts() {
             if (categoriesRes.ok) categoriesData = await categoriesRes.json();
         } catch { /* categories are optional */ }
 
-        if (productsData.success && productsData.data?.length) {
-            allProducts = productsData.data;
-            if (categoriesData?.success) renderCategoryFilters(categoriesData.data);
-        } else {
-            allProducts = FALLBACK_PRODUCTS;
+        if (!productsData.success) {
+            throw new Error(productsData.error || 'Products unavailable');
         }
-    } catch (err) {
-        console.warn('Using fallback products:', err.message);
-        allProducts = FALLBACK_PRODUCTS;
+        allProducts = productsData.data || [];
+        const used = new Set(allProducts.map(p => p.category));
+        const categories = (categoriesData?.data || []).filter(c => used.has(c.slug));
+        if (categories.length) renderCategoryFilters(categories);
+    } catch {
+        allProducts = [];
+        grid.innerHTML = '<p class="products-empty">Products could not be loaded. Please try again.</p>';
+        return;
     }
 
     bindFilterButtons();

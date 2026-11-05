@@ -301,31 +301,9 @@ async function loadProduct() {
             renderProductPage(product);
             return;
         }
-    } catch { /* fallback below */ }
+    } catch { /* show not found */ }
 
-    const fallback = FALLBACK_PRODUCT_DETAILS[slug];
-    if (fallback) {
-        renderProductPage(fallback);
-    } else {
-        renderNotFound();
-    }
+    renderNotFound();
 }
-
-const FALLBACK_PRODUCT_DETAILS = {
-    'invohub-invoicing-software': {
-        id: 1, name: 'invoHub - Invoicing Software', slug: 'invohub-invoicing-software',
-        category: 'Software', category_slug: 'software',
-        short_description: 'Invoicing software for small businesses',
-        description: 'Complete invoicing solution for small businesses.\n\nCreate professional invoices, track payments, manage clients, and generate financial reports — all in one place. Perfect for freelancers, SMEs, and growing businesses in Nigeria.',
-        price: 35000, original_price: null, stock: 99, badge: 'New', images: [],
-        specs: [
-            { spec_name: 'Invoicing', spec_value: 'Unlimited invoices & receipts' },
-            { spec_name: 'Payments', spec_value: 'Track paid & pending' },
-            { spec_name: 'Reports', spec_value: 'PDF & Excel export' },
-            { spec_name: 'Support', spec_value: 'Email & phone support' }
-        ],
-        related: []
-    }
-};
 
 loadProduct();

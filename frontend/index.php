@@ -214,13 +214,6 @@
             <!-- Category Filter -->
             <div class="product-filters">
                 <button class="filter-btn active" data-category="all">All Products</button>
-                <button class="filter-btn" data-category="software">Software</button>
-                <button class="filter-btn" data-category="laptops">Laptops</button>
-                <button class="filter-btn" data-category="accessories">Accessories</button>
-                <button class="filter-btn" data-category="networking">Networking</button>
-                <button class="filter-btn" data-category="components">Components</button>
-                <button class="filter-btn" data-category="peripherals">Peripherals</button>
-
             </div>
             
             <!-- Products Grid (loaded dynamically via app.js) -->

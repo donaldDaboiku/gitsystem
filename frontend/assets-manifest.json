@@ -1,0 +1,22 @@
+{
+    "style.css": {
+        "file": "style.d87daa7d18.css",
+        "hash": "d87daa7d18",
+        "built": "2026-11-05T08:32:12+00:00"
+    },
+    "shared.js": {
+        "file": "shared.c1898cd1fb.js",
+        "hash": "c1898cd1fb",
+        "built": "2026-11-05T08:32:12+00:00"
+    },
+    "app.js": {
+        "file": "app.20877ebe21.js",
+        "hash": "20877ebe21",
+        "built": "2026-11-05T08:32:12+00:00"
+    },
+    "product.js": {
+        "file": "product.433e9626ad.js",
+        "hash": "433e9626ad",
+        "built": "2026-11-05T08:32:12+00:00"
+    }
+}
