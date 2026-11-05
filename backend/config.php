@@ -15,7 +15,7 @@ if (!defined('DB_CHARSET')) define('DB_CHARSET', 'utf8mb4');
 // Site — override in config.local.php (local) or edit on the server (production)
 if (!defined('SITE_URL')) define('SITE_URL', 'https://yourdomain.com');
 if (!defined('WEB_BASE_PATH')) define('WEB_BASE_PATH', '/backend');
-if (!defined('ADMIN_PATH')) define('ADMIN_PATH', WEB_BASE_PATH . '/admin');
+if (!defined('ADMIN_PATH')) define('ADMIN_PATH', '/admin');
 if (!defined('UPLOAD_WEB_PATH')) define('UPLOAD_WEB_PATH', WEB_BASE_PATH . '/uploads');
 if (!defined('MAIL_FROM')) define('MAIL_FROM', '');
 if (!defined('SMTP_HOST')) define('SMTP_HOST', '');

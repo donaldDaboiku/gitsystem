@@ -17,7 +17,7 @@ define('DB_PASS', 'PUT_YOUR_MYSQL_PASSWORD_HERE');
 
 define('SITE_URL', 'https://gitsystemng.com');
 define('WEB_BASE_PATH', '/backend');
-define('ADMIN_PATH', WEB_BASE_PATH . '/admin');
+define('ADMIN_PATH', '/admin');
 define('UPLOAD_WEB_PATH', WEB_BASE_PATH . '/uploads');
 
 define('APP_DEBUG', false);

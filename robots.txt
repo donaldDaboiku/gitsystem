@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 
+Disallow: /admin/
 Disallow: /backend/admin/
 Disallow: /backend/storage/
 Disallow: /backend/config.php
