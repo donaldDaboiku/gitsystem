@@ -17,9 +17,10 @@
     RewriteCond %{HTTP_HOST} !^127\.0\.0\.1 [NC]
     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # Legacy .html → .php (bookmarks / search index)
-    RewriteRule ^index\.html$ index.php [L,R=301]
-    RewriteRule ^gitsystem\.html$ index.php [L,R=301]
+    # /frontend/index.php is the old address. Send it to https://gitsystemng.com/
+    RewriteRule ^index\.(php|html)$ / [L,R=301]
+    RewriteRule ^gitsystem\.html$ / [L,R=301]
+    RewriteRule ^$ / [L,R=301]
     RewriteRule ^product\.html$ product.php [L,QSA]
 
     # Clean product URLs: /frontend/product/slug-name

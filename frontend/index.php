@@ -1,4 +1,11 @@
-<?php require_once __DIR__ . '/bootstrap.php'; ?>
+<?php
+$uri = $_SERVER['REQUEST_URI'] ?? '';
+if (preg_match('#^/frontend/index\.(php|html)(?:\?|$)#i', $uri)) {
+    header('Location: /', true, 301);
+    exit;
+}
+require_once __DIR__ . '/bootstrap.php';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
