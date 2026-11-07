@@ -12,9 +12,13 @@ $frontend = $base . '/frontend';
 
 $urls = [
     ['loc' => $base . '/', 'priority' => '1.0', 'changefreq' => 'weekly'],
-    ['loc' => $base . '/#software', 'priority' => '0.8', 'changefreq' => 'weekly'],
-    ['loc' => $base . '/#products', 'priority' => '0.8', 'changefreq' => 'weekly'],
-    ['loc' => $base . '/#contact', 'priority' => '0.6', 'changefreq' => 'monthly'],
+    ['loc' => $base . '/about', 'priority' => '0.6', 'changefreq' => 'monthly'],
+    ['loc' => $base . '/services', 'priority' => '0.8', 'changefreq' => 'monthly'],
+    ['loc' => $base . '/products', 'priority' => '0.8', 'changefreq' => 'weekly'],
+    ['loc' => $base . '/software', 'priority' => '0.8', 'changefreq' => 'weekly'],
+    ['loc' => $base . '/academy', 'priority' => '0.6', 'changefreq' => 'monthly'],
+    ['loc' => $base . '/projects', 'priority' => '0.6', 'changefreq' => 'monthly'],
+    ['loc' => $base . '/contact', 'priority' => '0.6', 'changefreq' => 'monthly'],
 ];
 
 try {

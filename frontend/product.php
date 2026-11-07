@@ -1,4 +1,7 @@
-<?php require_once __DIR__ . '/bootstrap.php'; ?>
+<?php
+require_once __DIR__ . '/bootstrap.php';
+$navCurrent = 'products';
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,22 +14,7 @@
         <div class="glow-orb orb-2"></div>
     </div>
 
-    <header id="header">
-        <nav>
-            <a href="/" class="logo" aria-label="GITSYSTEM home">
-                <img src="/frontend/assets/gitsystem-logo.png" alt="GITSYSTEM" class="logo-img" width="200" height="40">
-            </a>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="/#home">Home</a></li>
-                <li><a href="/#services">Services</a></li>
-                <li><a href="/#products">Products</a></li>
-                <li><a href="/#contact">Contact</a></li>
-            </ul>
-            <div class="mobile-toggle" id="mobileToggle">
-                <span></span><span></span><span></span>
-            </div>
-        </nav>
-    </header>
+    <?php require __DIR__ . '/includes/nav.php'; ?>
 
     <main id="productMain">
         <div class="product-loading-screen">

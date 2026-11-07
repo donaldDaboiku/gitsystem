@@ -28,6 +28,14 @@
     RewriteCond %{THE_REQUEST} \s/+index\.php[\s?] [NC]
     RewriteRule ^index\.php$ / [R=301,L]
 
+    RewriteRule ^about/?$ frontend/about.php [L]
+    RewriteRule ^services/?$ frontend/services.php [L]
+    RewriteRule ^products/?$ frontend/products.php [L]
+    RewriteRule ^software/?$ frontend/software.php [L]
+    RewriteRule ^academy/?$ frontend/academy.php [L]
+    RewriteRule ^projects/?$ frontend/projects.php [L]
+    RewriteRule ^contact/?$ frontend/contact.php [L]
+
     # Admin is https://gitsystemng.com/admin
     RewriteRule ^admin$ /admin/ [R=301,L]
     RewriteCond %{THE_REQUEST} \s/+admin/login\.php[\s?] [NC]

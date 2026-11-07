@@ -303,7 +303,11 @@ require __DIR__ . '/includes/header.php';
             </thead>
             <tbody>
                 <?php foreach ($products as $p): ?>
-                <tr>
+                <?php
+                    $hasLaunch = trim((string)($p['learn_url'] ?? '')) !== '' || trim((string)($p['launch_url'] ?? '')) !== '';
+                    $isLive = strcasecmp((string)($p['badge'] ?? ''), 'Live') === 0 && (empty($p['is_external_app']) || $hasLaunch);
+                ?>
+                <tr class="<?= $isLive ? '' : 'product-not-live' ?>">
                     <td>
                         <?= htmlspecialchars($p['name']) ?>
                         <?php if ($p['is_featured']): ?><span class="badge badge-new">Featured</span><?php endif; ?>

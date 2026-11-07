@@ -186,6 +186,8 @@ th { color: var(--text-muted); font-weight: 600; font-size: 0.85rem; text-transf
 .badge-resolved { background: rgba(0, 200, 100, 0.2); color: #00cc66; }
 .badge-spam { background: rgba(255, 51, 102, 0.2); color: var(--accent); }
 
+tr.product-not-live { opacity: 0.45; filter: grayscale(1); }
+
 .login-page {
     min-height: 100vh;
     display: flex;

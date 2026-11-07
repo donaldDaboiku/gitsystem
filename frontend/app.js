@@ -1,6 +1,15 @@
 let allProducts = [];
 let activeCategory = 'all';
 
+function isProductLive(product) {
+    if ((product.badge || '').toLowerCase() !== 'live') return false;
+    if (isExternalApp(product) || isGitInvoiceProduct(product.slug)) {
+        const links = getExternalAppLinks(product);
+        return Boolean(links.learn || links.launch);
+    }
+    return true;
+}
+
 function buildProductCard(product) {
     const slug = product.slug || `product-${product.id}`;
     const badgeClass = product.badge?.toLowerCase() === 'sale' ? 'sale' : '';
@@ -18,9 +27,8 @@ function buildProductCard(product) {
         const links = getExternalAppLinks(product);
         const color = links.color;
         if (!links.learn && !links.launch) {
-            // External app configured but URLs not set yet
             return `
-            <article class="product-card product-card-external" data-category="${escapeHtml(product.category)}" style="--app-brand:${escapeHtml(color)}">
+            <article class="product-card product-card-external is-upcoming" data-category="${escapeHtml(product.category)}" style="--app-brand:${escapeHtml(color)}">
                 <div class="product-card-link">
                     <div class="product-badge" style="background:${escapeHtml(color)}">${escapeHtml(product.badge || 'Soon')}</div>
                     <div class="product-image product-image-external">
@@ -49,8 +57,9 @@ function buildProductCard(product) {
             ? `<div class="product-badge" style="background:${escapeHtml(color)}">${escapeHtml(product.badge)}</div>`
             : `<div class="product-badge" style="background:${escapeHtml(color)}">Live</div>`;
 
+        const upcoming = isProductLive(product) ? '' : ' is-upcoming';
         return `
-        <article class="product-card product-card-external ${isGit ? 'product-card-gitinvoice' : ''}" data-category="${escapeHtml(product.category)}" style="--app-brand:${escapeHtml(color)}">
+        <article class="product-card product-card-external ${isGit ? 'product-card-gitinvoice' : ''}${upcoming}" data-category="${escapeHtml(product.category)}" style="--app-brand:${escapeHtml(color)}">
             <a href="${escapeHtml(links.learn)}" class="product-card-link" target="_blank" rel="noopener noreferrer">
                 ${liveBadge}
                 <div class="product-image product-image-external">${visual}
@@ -75,8 +84,9 @@ function buildProductCard(product) {
     }
 
     const url = productUrl(slug);
+    const upcoming = isProductLive(product) ? '' : ' is-upcoming';
     return `
-        <article class="product-card" data-category="${escapeHtml(product.category)}">
+        <article class="product-card${upcoming}" data-category="${escapeHtml(product.category)}">
             <a href="${url}" class="product-card-link" target="_blank" rel="noopener noreferrer">
                 ${badgeHtml}
                 <div class="product-image">${imageHtml}
@@ -183,7 +193,7 @@ function renderSoftwareShowcase(products) {
             // Hide launch/learn if URLs not set yet (e.g. ChurchMS before admin fills them)
             if (!links.learn && !links.launch) {
                 return `
-                <div class="software-card software-card-external" style="--app-brand:${escapeHtml(color)}">
+                <div class="software-card software-card-external is-upcoming" style="--app-brand:${escapeHtml(color)}">
                     ${logoBlock}
                     <h3>${escapeHtml(product.name)}</h3>
                     <p>${escapeHtml(product.short_description || '')}</p>
@@ -191,8 +201,9 @@ function renderSoftwareShowcase(products) {
                 </div>`;
             }
 
+            const upcoming = isProductLive(product) ? '' : ' is-upcoming';
             return `
-            <div class="software-card software-card-external ${isGit ? 'software-card-gitinvoice' : ''}" style="--app-brand:${escapeHtml(color)}">
+            <div class="software-card software-card-external ${isGit ? 'software-card-gitinvoice' : ''}${upcoming}" style="--app-brand:${escapeHtml(color)}">
                 <div class="external-software-head">${isGit ? title : `${logoBlock}${title}`}</div>
                 <p>${escapeHtml(product.short_description || '')}</p>
                 <div class="software-actions">
@@ -202,8 +213,9 @@ function renderSoftwareShowcase(products) {
             </div>`;
         }
 
+        const upcoming = isProductLive(product) ? '' : ' is-upcoming';
         return `
-        <a href="${productUrl(product.slug)}" class="software-card" target="_blank" rel="noopener noreferrer">
+        <a href="${productUrl(product.slug)}" class="software-card${upcoming}" target="_blank" rel="noopener noreferrer">
             <span class="software-icon">${icons[product.slug] || '💻'}</span>
             <h3>${escapeHtml(product.name)}</h3>
             <p>${escapeHtml(product.short_description || '')}</p>
@@ -214,9 +226,10 @@ function renderSoftwareShowcase(products) {
 
 async function loadProducts() {
     const grid = document.querySelector('.products-grid');
-    if (!grid) return;
+    const software = document.getElementById('softwareGrid');
+    if (!grid && !software) return;
 
-    grid.innerHTML = '<p class="products-loading">Loading products…</p>';
+    if (grid) grid.innerHTML = '<p class="products-loading">Loading products…</p>';
 
     try {
         const productsRes = await fetch(`${API_BASE}?action=products`);
@@ -236,16 +249,19 @@ async function loadProducts() {
         allProducts = productsData.data || [];
         const used = new Set(allProducts.map(p => p.category));
         const categories = (categoriesData?.data || []).filter(c => used.has(c.slug));
-        if (categories.length) renderCategoryFilters(categories);
+        if (grid && categories.length) renderCategoryFilters(categories);
     } catch {
         allProducts = [];
-        grid.innerHTML = '<p class="products-empty">Products could not be loaded. Please try again.</p>';
+        if (grid) grid.innerHTML = '<p class="products-empty">Products could not be loaded. Please try again.</p>';
+        if (software) software.innerHTML = '<p class="products-empty">Products could not be loaded. Please try again.</p>';
         return;
     }
 
-    bindFilterButtons();
-    renderProducts(allProducts);
-    renderSoftwareShowcase(allProducts);
+    if (grid) {
+        bindFilterButtons();
+        renderProducts(allProducts);
+    }
+    if (software) renderSoftwareShowcase(allProducts);
 }
 
 function inquireProduct(productId, productName) {

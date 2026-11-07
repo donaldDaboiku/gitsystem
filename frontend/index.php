@@ -5,6 +5,7 @@ if (preg_match('#^/frontend/index\.(php|html)(?:\?|$)#i', $uri)) {
     exit;
 }
 require_once __DIR__ . '/bootstrap.php';
+$navCurrent = 'home';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,41 +21,18 @@ require_once __DIR__ . '/bootstrap.php';
         <div class="glow-orb orb-3"></div>
     </div>
     
-    <!-- Header -->
-    <header id="header">
-        <nav>
-            <a href="/" class="logo" aria-label="GITSYSTEM home">
-                <img src="/frontend/assets/gitsystem-logo.png" alt="GITSYSTEM — Greenpasture Integrated Technology" class="logo-img" width="220" height="44">
-            </a>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#products">Products</a></li>
-                <li><a href="#software">Software</a></li>
-                <li><a href="#academy">Academy</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <div class="mobile-toggle" id="mobileToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </nav>
-    </header>
+    <?php require __DIR__ . '/includes/nav.php'; ?>
     
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-content">
             <div class="hero-text">
-                <p class="hero-eyebrow">Greenpasture Integrated Technology</p>
-                <h1>
-                    Your Trusted <br>
-                    <span class="gradient-text">Technology Partner</span>
-                </h1>
-                <p class="hero-lead">Professional IT solutions, hardware & software services, networking, tech training, and expert consultation. Empowering businesses across Nigeria with cutting-edge technology.</p>
+                <p class="hero-eyebrow">GreenPasture Integrated Tech System</p>
+                <h1>Building Smarter Businesses Through Technology.</h1>
+                <p class="hero-lead">GIT System supplies hardware, builds software, installs networks, and trains teams. One company for the technology a business runs on.</p>
                 <div class="cta-buttons">
-                    <a href="#products" class="btn btn-primary">Explore Products</a>
-                    <a href="#contact" class="btn btn-secondary">Get a Quote</a>
+                    <a href="/software" class="btn btn-primary">Explore Our Solutions</a>
+                    <a href="/contact" class="btn btn-secondary">Talk to Our Team</a>
                 </div>
             </div>
             <div class="hero-visual">
@@ -84,24 +62,30 @@ require_once __DIR__ . '/bootstrap.php';
         </div>
     </section>
     
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="stats-grid">
-            <div class="stat-item">
-                <span class="stat-number" data-target="500">500+</span>
-                <span class="stat-label">Happy Clients</span>
+    <section class="why" id="why">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Why GIT System</span>
+                <h2>Technology support in one place</h2>
+                <p>Software, hardware, networks, and training, handled by the same team.</p>
             </div>
-            <div class="stat-item">
-                <span class="stat-number" data-target="1000">1000+</span>
-                <span class="stat-label">Projects Completed</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" data-target="50">50+</span>
-                <span class="stat-label">Tech Experts</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" data-target="24">24/7</span>
-                <span class="stat-label">Support Available</span>
+            <div class="why-grid">
+                <article class="why-card">
+                    <h3>Software</h3>
+                    <p>Business applications you can launch or enquire about from this site.</p>
+                </article>
+                <article class="why-card">
+                    <h3>Hardware</h3>
+                    <p>Sales, repair, and maintenance for the machines your office uses.</p>
+                </article>
+                <article class="why-card">
+                    <h3>Networks</h3>
+                    <p>Installation and upkeep for the connections between your offices.</p>
+                </article>
+                <article class="why-card">
+                    <h3>Academy</h3>
+                    <p>Training programmes your staff can enquire about from the contact form.</p>
+                </article>
             </div>
         </div>
     </section>
@@ -246,7 +230,7 @@ require_once __DIR__ . '/bootstrap.php';
                     <li><strong>Cloud Computing</strong> - AWS, Azure & Google Cloud</li>
                 </ul>
                 
-                <a href="#contact" class="btn btn-primary">Enroll Now</a>
+                <a href="/academy" class="btn btn-primary">GIT Academy</a>
             </div>
             
             <div class="academy-features">
@@ -365,50 +349,15 @@ require_once __DIR__ . '/bootstrap.php';
         </div>
     </section>
     
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <img src="/frontend/assets/gitsystem-wordmark.png" alt="GITSYSTEM" class="logo-img footer-logo" width="180" height="36">
-                <p><span data-setting="site_name">GITSYSTEM</span> — Greenpasture Integrated Technology. Your trusted partner for IT solutions, training, and consultation.</p>
-            </div>
-            
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#products">Products</a></li>
-                    <li><a href="#academy">Academy</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-section">
-                <h3>Services</h3>
-                <ul>
-                    <li><a href="#services">Software Solutions</a></li>
-                    <li><a href="#services">Hardware Repair</a></li>
-                    <li><a href="#services">Networking</a></li>
-                    <li><a href="#academy">Tech Training</a></li>
-                </ul>
-            </div>
-            
-            <div class="footer-section">
-                <h3>Contact Info</h3>
-                <ul>
-                    <li>📍 <span data-setting="site_address">Lagos, Nigeria</span></li>
-                    <li>📞 <a data-setting="site_phone_link" href="tel:">+234 XXX XXX XXXX</a></li>
-                    <li>📧 <a data-setting="site_email_link" href="mailto:">info@gitsystemng.com</a></li>
-                    <li>⏰ Mon-Sat: 8AM - 6PM</li>
-                </ul>
-            </div>
+    <section class="contact-cta">
+        <div class="container">
+            <h2>Talk to our team</h2>
+            <p>Send a consultation request. We reply using the phone and email saved in site settings.</p>
+            <a href="/contact" class="btn btn-primary">Contact GIT System</a>
         </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; <span id="currentYear"></span> <span data-setting="site_name">GITSYSTEM</span> — Greenpasture Integrated Technology. All rights reserved.</p>
-        </div>
-    </footer>
+    </section>
+
+    <?php require __DIR__ . '/includes/footer.php'; ?>
     
     <!-- Scroll to Top Button -->
     <button class="scroll-top" id="scrollTop">↑</button>
