@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/bootstrap.php';
 $pageTitle = 'Software';
-$pageDescription = 'Software products published from the GIT System catalog, plus TailorMate.';
+$pageDescription = 'Software products published from the GITSystem catalog, plus TailorMate.';
 $navCurrent = 'software';
 require __DIR__ . '/includes/page-start.php';
 ?>

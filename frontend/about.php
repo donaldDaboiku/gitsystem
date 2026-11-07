@@ -10,7 +10,7 @@ require __DIR__ . '/includes/page-start.php';
             <div class="section-header">
                 <span class="section-tag">About</span>
                 <h2>GreenPasture Integrated Tech System</h2>
-                <p>GIT System is the technology company behind gitsystemng.com.</p>
+                <p>GITSystem is the technology company behind gitsystemng.com.</p>
             </div>
             <div class="why-grid">
                 <article class="why-card">

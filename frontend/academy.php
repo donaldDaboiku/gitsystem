@@ -1,14 +1,14 @@
 <?php
 require_once __DIR__ . '/bootstrap.php';
 $pageTitle = 'GIT Academy';
-$pageDescription = 'Training programmes from GIT System. Enrol by sending an enquiry.';
+$pageDescription = 'Training programmes from GITSystem. Enrol by sending an enquiry.';
 $navCurrent = 'academy';
 require __DIR__ . '/includes/page-start.php';
 ?>
     <section class="academy">
         <div class="academy-content">
             <div class="academy-info">
-                <h2>GIT Academy</h2>
+                <h2>GITSystem Academy</h2>
                 <p>Training programmes you can ask about. Enrolment is an enquiry, not an online checkout.</p>
                 <ul class="courses-list">
                     <li><strong>Web Development</strong> — Full-stack development with modern frameworks</li>

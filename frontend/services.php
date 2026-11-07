@@ -9,7 +9,7 @@ require __DIR__ . '/includes/page-start.php';
         <div class="container">
             <div class="section-header">
                 <span class="section-tag">Services</span>
-                <h2>What GIT System does</h2>
+                <h2>What GITSystem does</h2>
                 <p>Ask about any of these from the contact page.</p>
             </div>
             <div class="services-grid">

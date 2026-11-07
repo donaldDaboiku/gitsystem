@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/bootstrap.php';
 $pageTitle = 'Contact';
-$pageDescription = 'Contact GIT System for a consultation or an enrolment enquiry.';
+$pageDescription = 'Contact GITSystem for a consultation or an enrolment enquiry.';
 $navCurrent = 'contact';
 require __DIR__ . '/includes/page-start.php';
 ?>
@@ -14,7 +14,7 @@ require __DIR__ . '/includes/page-start.php';
             </div>
             <div class="contact-content">
                 <div class="contact-info">
-                    <h2>GIT System</h2>
+                    <h2>GITSystem</h2>
                     <div class="contact-details">
                         <div class="contact-item">
                             <div>

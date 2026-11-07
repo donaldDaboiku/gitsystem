@@ -29,7 +29,7 @@ $navCurrent = 'home';
             <div class="hero-text">
                 <p class="hero-eyebrow">GreenPasture Integrated Tech System</p>
                 <h1>Building Smarter Businesses Through Technology.</h1>
-                <p class="hero-lead">GIT System supplies hardware, builds software, installs networks, and trains teams. One company for the technology a business runs on.</p>
+                <p class="hero-lead">GITSystem supplies hardware, builds software, installs networks, and trains teams. One company for the technology a business runs on.</p>
                 <div class="cta-buttons">
                     <a href="/software" class="btn btn-primary">Explore Our Solutions</a>
                     <a href="/contact" class="btn btn-secondary">Talk to Our Team</a>
@@ -353,7 +353,7 @@ $navCurrent = 'home';
         <div class="container">
             <h2>Talk to our team</h2>
             <p>Send a consultation request. We reply using the phone and email saved in site settings.</p>
-            <a href="/contact" class="btn btn-primary">Contact GIT System</a>
+            <a href="/contact" class="btn btn-primary">Contact GITSystem</a>
         </div>
     </section>
 

@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/bootstrap.php';
 $pageTitle = 'Products';
-$pageDescription = 'Browse GIT System products. Each item has details, pricing, and an enquiry button.';
+$pageDescription = 'Browse GITSystem products. Each item has details, pricing, and an enquiry button.';
 $navCurrent = 'products';
 require __DIR__ . '/includes/page-start.php';
 ?>

@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/bootstrap.php';
 $pageTitle = 'Projects';
-$pageDescription = 'The kinds of technology work GIT System does. Individual project write-ups are not published yet.';
+$pageDescription = 'The kinds of technology work GITSystem does. Individual project write-ups are not published yet.';
 $navCurrent = 'projects';
 require __DIR__ . '/includes/page-start.php';
 ?>
