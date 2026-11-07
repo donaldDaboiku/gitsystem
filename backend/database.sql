@@ -203,3 +203,22 @@ SELECT id, 'Inventory', 'Stock & SKU management', 1 FROM products WHERE slug = '
 UNION ALL SELECT id, 'Orders', 'POS & online order tracking', 2 FROM products WHERE slug = 'fsm-fashion-management-system'
 UNION ALL SELECT id, 'Customers', 'CRM & loyalty features', 3 FROM products WHERE slug = 'fsm-fashion-management-system'
 UNION ALL SELECT id, 'Reports', 'Sales & inventory analytics', 4 FROM products WHERE slug = 'fsm-fashion-management-system';
+
+-- Editable services, projects, courses, testimonials, and page titles.
+-- Rows are filled the first time a public page or the admin content screen loads.
+CREATE TABLE IF NOT EXISTS content_items (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    kind ENUM('service','project','course','testimonial') NOT NULL,
+    title VARCHAR(180) NOT NULL,
+    body TEXT NOT NULL,
+    sort_order INT NOT NULL DEFAULT 0,
+    is_active TINYINT(1) NOT NULL DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_kind_sort (kind, sort_order, id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS page_seo (
+    page_key VARCHAR(40) PRIMARY KEY,
+    title VARCHAR(180) NOT NULL,
+    description VARCHAR(300) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

@@ -3,6 +3,7 @@
  * Frontend bootstrap — loads config for SITE_URL and asset helpers.
  */
 require_once __DIR__ . '/../backend/config.php';
+require_once __DIR__ . '/../backend/content_store.php';
 send_security_headers();
 
 function frontend_url(string $path = ''): string {

@@ -3,6 +3,7 @@ require_once __DIR__ . '/bootstrap.php';
 $pageTitle = 'Projects';
 $pageDescription = 'The kinds of technology work GITSystem does. Individual project write-ups are not published yet.';
 $navCurrent = 'projects';
+$seoKey = 'projects';
 require __DIR__ . '/includes/page-start.php';
 ?>
     <section class="services">
@@ -13,23 +14,14 @@ require __DIR__ . '/includes/page-start.php';
                 <p>Named project write-ups and photographs are not published yet. These are the kinds of jobs the services page already describes.</p>
             </div>
             <div class="why-grid">
+                <?php foreach (content_or_default($pdo, 'project') as $item): ?>
                 <article class="why-card">
-                    <h3>Software projects</h3>
-                    <p>Custom systems and the software products listed on this site.</p>
+                    <h3><?= frontend_h($item['title']) ?></h3>
+                    <p><?= frontend_h($item['body']) ?></p>
                 </article>
-                <article class="why-card">
-                    <h3>Networking</h3>
-                    <p>Office networks, Wi-Fi, and the equipment that connects them.</p>
-                </article>
-                <article class="why-card">
-                    <h3>Installations</h3>
-                    <p>Hardware and infrastructure set up on site.</p>
-                </article>
-                <article class="why-card">
-                    <h3>Ask about a job</h3>
-                    <p><a href="/contact">Send the details on the contact form.</a></p>
-                </article>
+                <?php endforeach; ?>
             </div>
+            <p style="text-align:center;margin-top:2rem;"><a href="/contact" class="btn btn-primary">Ask about a job</a></p>
         </div>
     </section>
 <?php require __DIR__ . '/includes/page-end.php'; ?>

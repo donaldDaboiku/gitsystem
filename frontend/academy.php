@@ -3,6 +3,7 @@ require_once __DIR__ . '/bootstrap.php';
 $pageTitle = 'GIT Academy';
 $pageDescription = 'Training programmes from GITSystem. Enrol by sending an enquiry.';
 $navCurrent = 'academy';
+$seoKey = 'academy';
 require __DIR__ . '/includes/page-start.php';
 ?>
     <section class="academy">
@@ -11,12 +12,9 @@ require __DIR__ . '/includes/page-start.php';
                 <h2>GITSystem Academy</h2>
                 <p>Training programmes you can ask about. Enrolment is an enquiry, not an online checkout.</p>
                 <ul class="courses-list">
-                    <li><strong>Web Development</strong> — Full-stack development with modern frameworks</li>
-                    <li><strong>Network Engineering</strong> — CCNA, CCNP and enterprise networking</li>
-                    <li><strong>Cybersecurity</strong> — Ethical hacking and security analysis</li>
-                    <li><strong>Hardware Repair</strong> — Computer technician training</li>
-                    <li><strong>Data Science</strong> — Analytics, machine learning, and AI fundamentals</li>
-                    <li><strong>Cloud Computing</strong> — AWS, Azure, and Google Cloud</li>
+                    <?php foreach (content_or_default($pdo, 'course') as $item): ?>
+                    <li><strong><?= frontend_h($item['title']) ?></strong> — <?= frontend_h($item['body']) ?></li>
+                    <?php endforeach; ?>
                 </ul>
                 <a href="/contact" class="btn btn-primary">Enrolment enquiry</a>
             </div>

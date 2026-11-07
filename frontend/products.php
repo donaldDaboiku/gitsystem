@@ -3,6 +3,7 @@ require_once __DIR__ . '/bootstrap.php';
 $pageTitle = 'Products';
 $pageDescription = 'Browse GITSystem products. Each item has details, pricing, and an enquiry button.';
 $navCurrent = 'products';
+$seoKey = 'products';
 require __DIR__ . '/includes/page-start.php';
 ?>
     <section class="products">

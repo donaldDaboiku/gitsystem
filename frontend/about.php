@@ -3,6 +3,8 @@ require_once __DIR__ . '/bootstrap.php';
 $pageTitle = 'About';
 $pageDescription = 'GreenPasture Integrated Tech System supplies hardware, builds software, installs networks, and trains teams.';
 $navCurrent = 'about';
+$seoKey = 'about';
+$testimonials = content_or_default($pdo, 'testimonial');
 require __DIR__ . '/includes/page-start.php';
 ?>
     <section class="services">
@@ -30,6 +32,16 @@ require __DIR__ . '/includes/page-start.php';
                     <p><a href="https://gitsystemng.com/tailormate">Open TailorMate</a></p>
                 </article>
             </div>
+            <?php if ($testimonials): ?>
+            <div class="why-grid" style="margin-top:2rem;">
+                <?php foreach ($testimonials as $item): ?>
+                <article class="why-card">
+                    <h3><?= frontend_h($item['title']) ?></h3>
+                    <p><?= frontend_h($item['body']) ?></p>
+                </article>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
         </div>
     </section>
 <?php require __DIR__ . '/includes/page-end.php'; ?>

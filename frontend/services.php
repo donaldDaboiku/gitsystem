@@ -3,6 +3,7 @@ require_once __DIR__ . '/bootstrap.php';
 $pageTitle = 'Services';
 $pageDescription = 'Hardware, repairs, software, business automation, networking, consultancy, installation, and technology support.';
 $navCurrent = 'services';
+$seoKey = 'services';
 require __DIR__ . '/includes/page-start.php';
 ?>
     <section class="services">
@@ -13,38 +14,12 @@ require __DIR__ . '/includes/page-start.php';
                 <p>Ask about any of these from the contact page.</p>
             </div>
             <div class="services-grid">
+                <?php foreach (content_or_default($pdo, 'service') as $item): ?>
                 <div class="service-card">
-                    <h3>Hardware sales and support</h3>
-                    <p>Computer sales, assembly, and the accessories an office needs.</p>
+                    <h3><?= frontend_h($item['title']) ?></h3>
+                    <p><?= frontend_h($item['body']) ?></p>
                 </div>
-                <div class="service-card">
-                    <h3>Repairs and maintenance</h3>
-                    <p>Diagnostics, repairs, upgrades, and preventive maintenance.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Software development</h3>
-                    <p>Custom software, installation, licensing, and updates.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Business automation</h3>
-                    <p>Systems that take a repeated office task and run it in software.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Network installation</h3>
-                    <p>Network design, Wi-Fi, servers, and ongoing maintenance.</p>
-                </div>
-                <div class="service-card">
-                    <h3>IT consultancy</h3>
-                    <p>Technology planning, system reviews, and infrastructure advice.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Equipment installation</h3>
-                    <p>Setup of the hardware and network equipment you buy.</p>
-                </div>
-                <div class="service-card">
-                    <h3>Technology support</h3>
-                    <p>Help after the installation, for the systems we put in place.</p>
-                </div>
+                <?php endforeach; ?>
             </div>
             <p style="text-align:center;margin-top:2rem;"><a href="/contact" class="btn btn-primary">Talk to our team</a></p>
         </div>

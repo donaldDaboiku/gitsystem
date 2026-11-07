@@ -3,6 +3,7 @@ require_once __DIR__ . '/bootstrap.php';
 $pageTitle = 'Contact';
 $pageDescription = 'Contact GITSystem for a consultation or an enrolment enquiry.';
 $navCurrent = 'contact';
+$seoKey = 'contact';
 require __DIR__ . '/includes/page-start.php';
 ?>
     <section class="contact" id="contact">

@@ -16,6 +16,9 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title><?= htmlspecialchars($pageTitle ?? 'Admin') ?> - GITSYSTEM</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="assets/admin.css">
 </head>
 <body>
@@ -27,6 +30,8 @@ $currentPage = basename($_SERVER['PHP_SELF'], '.php');
                 <a href="products.php" class="<?= $currentPage === 'products' ? 'active' : '' ?>">Products</a>
                 <a href="inquiries.php" class="<?= $currentPage === 'inquiries' ? 'active' : '' ?>">Inquiries</a>
                 <a href="settings.php" class="<?= $currentPage === 'settings' ? 'active' : '' ?>">Settings</a>
+                <a href="content.php?kind=service" class="<?= $currentPage === 'content' ? 'active' : '' ?>">Content</a>
+                <a href="seo.php" class="<?= $currentPage === 'seo' ? 'active' : '' ?>">SEO</a>
                 <a href="logout.php">Logout</a>
             </nav>
         </aside>

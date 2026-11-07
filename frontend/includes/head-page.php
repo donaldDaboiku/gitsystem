@@ -2,6 +2,13 @@
 /** Inner page head. Set $pageTitle and $pageDescription before including. Requires bootstrap.php. */
 $pageTitle = $pageTitle ?? 'GITSYSTEM';
 $pageDescription = $pageDescription ?? 'GreenPasture Integrated Tech System.';
+if (!empty($seoKey)) {
+    $seo = seo_public($pdo, (string)$seoKey);
+    if ($seo) {
+        if ($seo['title'] !== '') $pageTitle = $seo['title'];
+        if ($seo['description'] !== '') $pageDescription = $seo['description'];
+    }
+}
 $canonical = rtrim(SITE_URL, '/') . strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
 ?>
     <meta charset="UTF-8">

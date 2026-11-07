@@ -3,6 +3,7 @@ require_once __DIR__ . '/bootstrap.php';
 $pageTitle = 'Software';
 $pageDescription = 'Software products published from the GITSystem catalog, plus TailorMate.';
 $navCurrent = 'software';
+$seoKey = 'software';
 require __DIR__ . '/includes/page-start.php';
 ?>
     <section class="software-showcase">
