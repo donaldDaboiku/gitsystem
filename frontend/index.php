@@ -65,7 +65,7 @@ $navCurrent = 'home';
     <section class="why" id="why">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Why GIT System</span>
+                <span class="section-tag">Why GITSystem</span>
                 <h2>Technology support in one place</h2>
                 <p>Software, hardware, networks, and training, handled by the same team.</p>
             </div>
@@ -279,7 +279,7 @@ $navCurrent = 'home';
                             <span class="contact-icon">📞</span>
                             <div>
                                 <strong>Phone</strong><br>
-                                <a data-setting="site_phone_link" href="tel:">+234 XXX XXX XXXX</a>
+                                <a data-setting="site_phone_link" href="tel:">+234 810 019 1205</a>
                             </div>
                         </div>
                         <div class="contact-item">
